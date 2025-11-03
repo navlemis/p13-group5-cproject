@@ -1,0 +1,18 @@
+// .vscode/launch.json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run active C file",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${fileDirname}/a.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${fileDirname}",
+      "preLaunchTask": "build active C file",
+      "environment": [],
+      "console": "integratedTerminal"
+    }
+  ]
+}
