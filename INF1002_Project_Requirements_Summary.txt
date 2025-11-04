@@ -1,0 +1,107 @@
+
+Columns:
+------------------------------------------------------------
+| Column     | Data Type |
+|-------------|------------|
+| ID          | Integer    |
+| Name        | String     |
+| Programme   | String     |
+| Mark        | Float      |
+------------------------------------------------------------
+
+Sample Record:
+2301234 Joshua Chen Software Engineering 70.5
+
+
+------------------------------------------------------------
+2. CORE OPERATIONS
+------------------------------------------------------------
+Your CMS must support the following commands:
+
+1. OPEN
+   - Opens the database file and reads all records.
+
+2. SHOW ALL
+   - Displays all current records in memory.
+
+3. INSERT
+   - Adds a new record.
+   - Rejects duplicate IDs.
+
+4. QUERY
+   - Searches for a record by student ID.
+   - Displays data if found, otherwise show warning.
+
+5. UPDATE
+   - Updates record data for a specific student ID.
+
+6. DELETE
+   - Deletes a record by student ID (requires confirmation).
+
+7. SAVE
+   - Saves all current records into the database file.
+
+
+------------------------------------------------------------
+3. ENHANCEMENT FEATURES
+------------------------------------------------------------
+To achieve a higher grade, include the following:
+
+A. Sorting Features
+   - Sort by Student ID (ascending/descending).
+   - Sort by Mark (ascending/descending).
+   - Example: SHOW ALL SORT BY ID / SHOW ALL SORT BY MARK.
+
+B. Summary Statistics
+   - Command: SHOW SUMMARY
+   - Display:
+     - Total number of students
+     - Average mark
+     - Highest and lowest marks with student names
+
+C. Unique Feature
+   - Design your own additional feature that:
+     - Demonstrates C programming techniques.
+     - Fits naturally into the CMS.
+
+
+------------------------------------------------------------
+4. TEST CASE DESIGN & VALIDATION
+------------------------------------------------------------
+You must design a comprehensive set of test cases.
+
+Sample Test Case Format:
+
+| Test ID | Description | Input | Expected Output | Purpose | Result |
+|----------|-------------|--------|-----------------|----------|---------|
+| TC05 | Update Record Successfully | UPDATE ID=250001 Mark=88.0 | Record updated | Verify update logic | Pass |
+
+- Include these test cases in your report.
+- Demonstrate them in your project video.
+
+
+------------------------------------------------------------
+5. DECLARATION OF NON-PLAGIARISM
+------------------------------------------------------------
+When the CMS starts, it must display:
+
+"Declaration
+
+SIT’s policy on copying does not allow students to copy code or assessments
+from others or AI. Students must ensure all work is original.
+
+We hereby declare that:
+- We understand and agree to the plagiarism policy.
+- We did not copy code from others or AI sources.
+- We did not share or upload our code for public access.
+- We agree to receive zero marks if plagiarism is detected.
+
+Declared by: [Group Name]
+Team members:
+1. [Name]
+2. [Name]
+3. [Name]
+4. [Name]
+5. [Name]
+Date: [Submission Date]
+"
