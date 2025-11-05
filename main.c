@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
 #define MAX_INPUT_LENGTH 100
 #define MAX_RECORDS 100
 #define DB_NAME "Sample-CMS.txt"
