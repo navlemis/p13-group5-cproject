@@ -143,53 +143,60 @@ void show_all_records(Student *records, int count)
     }
 }
 
-//parser to extract fields
-int parse_fields(const char *input, Student *s)
+//parser to extract fields from user input
+int parse_fields(const char *input, Student *tempStudent)
 {
-    if (!s) return 0;
+    if (!tempStudent) return 0; //checks if its null
 
-    s->id = -1;
-    s->mark = -1;
-    s->name[0] = '\0';
-    s->programme[0] = '\0';
+    //structure of the student variables
+    tempStudent->id = -1;
+    tempStudent->mark = -1;
+    tempStudent->name[0] = '\0';
+    tempStudent->programme[0] = '\0';
 
-    char buffer[256];
-    strncpy(buffer, input, sizeof(buffer));
-    buffer[sizeof(buffer) - 1] = '\0';
+    char tempInput[256]; //storing in tempInput for string manipulation
+    strncpy(tempInput, input, sizeof(tempInput));
+    tempInput[sizeof(tempInput) - 1] = '\0';
 
-    // Find field positions
-    char *idPtr = strstr(buffer, "ID=");
-    char *namePtr = strstr(buffer, "Name=");
-    char *progPtr = strstr(buffer, "Programme=");
-    char *markPtr = strstr(buffer, "Mark=");
+    //locates where the variables are in the string with strstr
+    char *idPtr = strstr(tempInput, "ID=");
+    char *namePtr = strstr(tempInput, "Name=");
+    char *progPtr = strstr(tempInput, "Programme=");
+    char *markPtr = strstr(tempInput, "Mark=");
 
-    // Parse ID
-    if (idPtr) sscanf(idPtr, "ID=%d", &s->id);
+    //parses id
+    if (idPtr) 
+    {
+        sscanf(idPtr, "ID=%d", &tempStudent->id);
+    }
 
-    // Parse Mark
-    if (markPtr) sscanf(markPtr, "Mark=%f", &s->mark);
+    //parses marks
+    if (markPtr) 
+    {
+        sscanf(markPtr, "Mark=%f", &tempStudent->mark);
+    }
 
-    // Extract Name
+    //gets the name
     if (namePtr)
     {
-        char *end = progPtr ? progPtr : markPtr ? markPtr : buffer + strlen(buffer);
+        char *end = progPtr ? progPtr : markPtr ? markPtr : tempInput + strlen(tempInput);
         int len = end - (namePtr + 5);
-        if (len > 0 && len < sizeof(s->name))
+        if (len > 0 && len < sizeof(tempStudent->name))
         {
-            strncpy(s->name, namePtr + 5, len);
-            s->name[len] = '\0';
+            strncpy(tempStudent->name, namePtr + 5, len);
+            tempStudent->name[len] = '\0';
         }
     }
 
-    // Extract Programme
+    //gets the programme
     if (progPtr)
     {
-        char *end = markPtr ? markPtr : buffer + strlen(buffer);
+        char *end = markPtr ? markPtr : tempInput + strlen(tempInput);
         int len = end - (progPtr + 10);
-        if (len > 0 && len < sizeof(s->programme))
+        if (len > 0 && len < sizeof(tempStudent->programme))
         {
-            strncpy(s->programme, progPtr + 10, len);
-            s->programme[len] = '\0';
+            strncpy(tempStudent->programme, progPtr + 10, len);
+            tempStudent->programme[len] = '\0';
         }
     }
 
