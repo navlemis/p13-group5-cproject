@@ -4,9 +4,24 @@
 #include <ctype.h>
 
 #define MAX_INPUT_LENGTH 100
+#define MAX_RECORDS 100
 #define DB_NAME "Sample-CMS.txt"
 
-//function to convert string to uppercase
+//student "object" structure
+typedef struct
+{
+    int id;
+    char name[50];
+    char programme[50];
+    float mark;
+} Student;
+
+//global variable for everyone to access
+Student records[MAX_RECORDS];
+int recordCount = 0;
+int isModified = 0;
+
+//convert string to upper
 void to_upper(char *str)
 {
     for (int i = 0; str[i]; i++)
@@ -15,72 +30,208 @@ void to_upper(char *str)
     }
 }
 
-//open command for first time booting up the program
-int handle_open()
-{
-    FILE *file = fopen(DB_NAME, "r+");
+//load records from file into Student array
+int load_records(const char *filename, Student *records, int maxRecords) {
+    FILE *file = fopen(filename, "r"); //open file as read mode
 
-    if (file == NULL) {
-        perror("Error opening file");
-        return 0;
+    char line[256];
+    int count = 0;
+    int inTable = 0;
+
+    while (fgets(line, sizeof(line), file) && count < maxRecords) 
+    {
+        line[strcspn(line, "\n")] = 0; //strips newline \n character
+
+        if (strncmp(line, "Table Name:", 11) == 0) 
+        //if first 11 characters match "Table Name:", to detect start of table in .txt file
+        {
+
+            inTable = 1; // equals 1 to indicate table section started
+            continue;
+        }
+
+        if (inTable && strlen(line) > 0 && isdigit(line[0])) 
+        //intable must be 1, line after must not be empty, and check if first character is digit
+        {
+            sscanf(line, "%d %88[^\t] %88[^\t] %f", //parses each line into student record fields 
+                   &records[count].id,
+                   records[count].name,
+                   records[count].programme,
+                   &records[count].mark);
+            count++;
+        }
     }
 
-    printf("The database file \"%s\" is successfully opened.\n", DB_NAME);
     fclose(file);
+    return count; //returns count to measure number of records loaded
+}
+
+// Handle OPEN command
+int handle_open(Student *records, int maxRecords, int *recordCount)
+{
+    *recordCount = load_records(DB_NAME, records, maxRecords);
+    printf("The database file \"%s\" is successfully opened.\n", DB_NAME);
     return 1;
 }
 
-//quit to exit program
+// Handle QUIT command
 void handle_quit()
 {
     printf("Exiting the CMS Database System. Goodbye!\n");
     exit(0);
 }
 
-//error handling for unknown command
+// Handle unknown commands
 void handle_unknown(const char *command)
 {
     printf("Unknown command. Please enter a valid command.\n");
 }
 
-//main menu display options
+// Display submenu options
 void display_menu()
 {
-    printf("-------------------------------\n");
+    printf("\n-------------------------------\n");
     printf("CMS Database System Commands:\n");
     printf("1. SHOW ALL - Display all contents in the database table.\n");
     printf("2. QUIT - Exit the program.\n");
-    printf("Please enter a command: ");
-
+    printf("3. INSERT ID=(id) Name=(Name) Programme=(programme) Mark=(mark) - Insert a new record into the database.\n");
+    printf("10. SAVE - Save changes to the database file after making edits.\n");
+    printf("Please enter a command (Case Sensitive): ");
 }
 
-//1. SHOW ALL function to load and display all records from the database table
-void load_table(const char *filename)
+// Display all loaded records
+void show_all_records(Student *records, int count)
 {
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        perror("Error opening file");
+    if (count == 0)
+    {
+        printf("No records loaded.\n");
         return;
     }
 
-    char line[256];
-    int inTable = 0;
+    printf("Here are all the records found in the table \"StudentRecords\".\n");
+    printf("ID\tName\t\tProgramme\t\tMark\n");
 
-    while (fgets(line, sizeof(line), file)) {
-        line[strcspn(line, "\n")] = 0;
+    for (int i = 0; i < count; i++)
+    {
+        printf("%d\t%-15s %-20s %.1f\n",
+               records[i].id,
+               records[i].name,
+               records[i].programme,
+               records[i].mark);
+    }
+}
 
-        if (strncmp(line, "Table Name:", 11) == 0) {
-            printf("Here are all the records found in the table \"%s\".\n", line + 12);
-            inTable = 1;
-            continue;
-        }
+//parser to extract fields
+int parse_fields(const char *input, Student *s)
+{
+    if (!s) return 0;
 
-        if (inTable && strlen(line) > 0) {
-            printf("%s\n", line);
+    s->id = -1;
+    s->mark = -1;
+    s->name[0] = '\0';
+    s->programme[0] = '\0';
+
+    char buffer[256];
+    strncpy(buffer, input, sizeof(buffer));
+    buffer[sizeof(buffer) - 1] = '\0';
+
+    // Find field positions
+    char *idPtr = strstr(buffer, "ID=");
+    char *namePtr = strstr(buffer, "Name=");
+    char *progPtr = strstr(buffer, "Programme=");
+    char *markPtr = strstr(buffer, "Mark=");
+
+    // Parse ID
+    if (idPtr) sscanf(idPtr, "ID=%d", &s->id);
+
+    // Parse Mark
+    if (markPtr) sscanf(markPtr, "Mark=%f", &s->mark);
+
+    // Extract Name
+    if (namePtr)
+    {
+        char *end = progPtr ? progPtr : markPtr ? markPtr : buffer + strlen(buffer);
+        int len = end - (namePtr + 5);
+        if (len > 0 && len < sizeof(s->name))
+        {
+            strncpy(s->name, namePtr + 5, len);
+            s->name[len] = '\0';
         }
     }
 
+    // Extract Programme
+    if (progPtr)
+    {
+        char *end = markPtr ? markPtr : buffer + strlen(buffer);
+        int len = end - (progPtr + 10);
+        if (len > 0 && len < sizeof(s->programme))
+        {
+            strncpy(s->programme, progPtr + 10, len);
+            s->programme[len] = '\0';
+        }
+    }
+
+    return 1;
+}
+
+void insert_record(const char *args, Student *records, int *count, int maxRecords)
+{
+    if (*count >= maxRecords)
+    {
+        printf("CMS: Cannot insert. Maximum record limit reached.\n");
+        return;
+    }
+
+    Student temp;
+    parse_fields(args, &temp);
+
+    // Validate required fields
+    if (temp.id == -1 || strlen(temp.name) == 0 || strlen(temp.programme) == 0 || temp.mark < 0)
+    {
+        printf("CMS: Invalid INSERT format. Required: ID, Name, Programme, Mark.\n");
+        return;
+    }
+
+    // Check for duplicate ID
+    for (int i = 0; i < *count; i++)
+    {
+        if (records[i].id == temp.id)
+        {
+            printf("CMS: Record with ID=%d already exists.\n", temp.id);
+            return;
+        }
+    }
+
+    // Store the record
+    records[*count] = temp;
+    (*count)++;
+    isModified = 1;
+
+    printf("CMS: Record with ID=%d successfully inserted.\n", temp.id);
+}
+
+
+
+int save_records(const char *filename, Student *records, int count)
+{
+    FILE *file = fopen(filename, "w");
+    if (!file) {
+        perror("Error saving file");
+        return 0;
+    }
+
+    fprintf(file, "Table Name: StudentRecords\n");
+
+    for (int i = 0; i < count; i++) {
+        fprintf(file, "%d\t%s\t%s\t%.1f\n",
+                records[i].id,
+                records[i].name,
+                records[i].programme,
+                records[i].mark);
+    }
+
     fclose(file);
+    return 1;
 }
 
 int main()
@@ -103,7 +254,7 @@ int main()
 
         if (strcmp(userCommand, "OPEN") == 0)
         {
-            if (handle_open() == 1)
+            if (handle_open(records, MAX_RECORDS, &recordCount))
             {
                 char subCommand[MAX_INPUT_LENGTH];
                 while (1)
@@ -116,31 +267,75 @@ int main()
                     }
 
                     subCommand[strcspn(subCommand, "\n")] = 0;
-                    to_upper(subCommand);
+                    //to_upper(subCommand); COMMENTED FOR NOW, unsure if must be case sensitive
 
                     if (strcmp(subCommand, "SHOW ALL") == 0)
                     {
-                        load_table(DB_NAME);
+                        show_all_records(records, recordCount);
                     }
                     else if (strcmp(subCommand, "QUIT") == 0)
                     {
                         handle_quit();
                     }
-                    else
+                    else if (strncmp(subCommand, "INSERT", 6) == 0)
+                    {
+                    if (strlen(subCommand) > 7)
+                        {
+                            const char *insertArgs = subCommand + 7; // skip "INSERT "
+                            insert_record(insertArgs, records, &recordCount, MAX_RECORDS);
+                        }
+                        else
+                        {
+                            printf("CMS: Invalid INSERT command format. Example: INSERT ID=123 Name=Elvan Programme=CMS Mark=88\n");
+                        }
+                    }
+                    else if (strncmp(subCommand, "PARSE TEST", 10) == 0)
+                    {
+                        if (strlen(subCommand) > 11)
+                        {
+                            const char *parseArgs = subCommand + 11; // skip "PARSE TEST "
+                            Student temp;
+                            parse_fields(parseArgs, &temp);
+
+                            printf("Parsed Fields:\n");
+                            printf("ID: %d\n", temp.id);
+                            printf("Name: %s\n", temp.name);
+                            printf("Programme: %s\n", temp.programme);
+                            printf("Mark: %.2f\n", temp.mark);
+                        }
+                        else 
+                        {
+                            printf("CMS: Invalid PARSE TEST format. Example: PARSE TEST ID=123 Name=Elvan Programme=CMS Mark=88\n");
+                        }
+                    }
+                    else if (strncmp(subCommand, "SAVE", 4) == 0)
+                    {
+                        if (save_records(DB_NAME, records, recordCount))
+                        {
+                            isModified = 0;
+                            printf("CMS: Changes saved to \"%s\" successfully.\n", DB_NAME);
+                        }
+                        else
+                        {
+                            printf("CMS: Failed to save changes to \"%s\".\n", DB_NAME);
+                        }
+                    }
+                    else 
                     {
                         handle_unknown(subCommand);
                     }
                 }
             }
         } 
-        else if (strcmp(userCommand, "QUIT") == 0)
+        else if (strcmp(userCommand, "QUIT") == 0) 
         {
             handle_quit();
-        }
-        else
+        } 
+        else 
         {
             handle_unknown(userCommand);
         }
     }
 
+    return 0;
 }
