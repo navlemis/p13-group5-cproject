@@ -117,6 +117,7 @@ void display_menu()
     printf("2. QUIT - Exit the program.\n");
     printf("3. INSERT ID=(id) Name=(Name) Programme=(programme) Mark=(mark) - Insert a new record into the database.\n");
     printf("4. QUERY ID=(id) - Search for a student record by ID.\n");
+    printf("5. UPDATE ID=(id) Name=(Name) Programme=(programme) Mark=(mark) - Update an existing student's record.\n");
     printf("10. SAVE - Save changes to the database file after making edits.\n");
     printf("Please enter a command (Case Sensitive): ");
 }
