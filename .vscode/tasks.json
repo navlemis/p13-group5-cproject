@@ -51,6 +51,7 @@
                 "parser.c",
                 "loadSave.c",
                 "utilities.c",
+                "delete.c",
                 "-o",
                 "cms.exe"
             ],
