@@ -95,3 +95,43 @@ void show_all_records(Student *head)
         head = head->next;
     }
 }
+
+void update_record(const char *args, Student *head)
+{
+    Student temp;
+    if (!parse_fields(args, &temp) || temp.id == -1)
+    {
+        printf("CMS: Invalid UPDATE format. Required: ID. Example: UPDATE ID=123\n");
+        return;
+    }
+
+    Student *current = head;
+    while (current)
+    {
+        if (current->id == temp.id)
+        {
+            break;
+        }
+        current = current->next;
+    }    
+
+    if (!current)
+    {
+        printf("CMS: The record with ID=%d does not exist.\n", temp.id);
+        return;
+    }
+
+    if (strlen(temp.programme) > 0)
+    {
+        strcpy(current->programme, temp.programme);
+    }
+
+    if (temp.mark >= 0)
+    {
+        current->mark = temp.mark;
+    }
+
+    printf("CMS: The record with ID=%d is successfully updated.\n", temp.id);
+    printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
+    printf("%-8d\t%-20s\t%-30s\t%.1f\n", current->id, current->name, current->programme, current->mark);
+}

@@ -15,6 +15,7 @@ typedef struct Student {
 void insert_record(const char *args, Student **head);
 void query_record(const char *args, Student *head);
 void show_all_records(Student *head);
+void update_record(const char *args, Student *head);
 int count_records(Student *head);
 
 #endif

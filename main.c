@@ -66,6 +66,15 @@ int main() {
                             printf("CMS: Invalid QUERY format. Example: QUERY ID=123\n");
                         }
                     }
+                    else if (strncmp(subCommand, "UPDATE", 6) == 0) {
+                        if (strlen(subCommand) > 7) {
+                            const char *updateArgs = subCommand + 7;
+                            update_record(updateArgs, head);
+                            isModified = 1;
+                        } else {
+                            printf("CMS: Invalid UPDATE format. Example: UPDATE ID=123 Programme=NewProgramme Mark=85.5\n");
+                        }
+                    }
                     else if (strncmp(subCommand, "PARSE TEST", 10) == 0) {
                         if (strlen(subCommand) > 11) {
                             const char *parseArgs = subCommand + 11;
