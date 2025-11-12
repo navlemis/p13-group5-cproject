@@ -165,7 +165,7 @@ void update_record(const char *args, Student *head)
     Student temp;
     if (!parse_fields(args, &temp) || temp.id == -1)
     {
-        printf("CMS: Invalid UPDATE format. Required: ID. Example: UPDATE ID=123\n");
+        printf("CMS: Invalid UPDATE format. Example: UPDATE ID=123 Programme=NewProgramme OR Mark=85.5\n");
         return;
     }
 
