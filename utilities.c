@@ -16,7 +16,7 @@ void display_menu() {
     printf("CMS Database System Commands:\n");
     printf("1. SHOW ALL - Display all contents in the database table.\n");
     printf("2. INSERT ID=(id) Name=(Name) Programme=(programme) Mark=(mark) - Insert a new record into the database.\n");
-    printf("3. QUERY ID=(id) - Search for a student record by ID.\n");
+    printf("3. QUERY - Search for a student record by ID,Name,Programmes.\n");
     printf("4. UPDATE ID=(id) Programme=(programme to update) Mark=(mark to update) - Update Programme and/or Mark for an existing record.\n");
     printf("5. SHOW SUMMARY - Display a summary statistics of the student records.\n");
     printf("6. SAVE - Save changes to the database file after making edits.\n");

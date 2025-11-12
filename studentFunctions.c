@@ -3,6 +3,7 @@
 #include <string.h>
 #include "studentFunctions.h"
 #include "parser.h"
+#include "utilities.h"
 
 void insert_record(const char *args, Student **head) 
 {
@@ -53,31 +54,6 @@ void insert_record(const char *args, Student **head)
     printf("CMS: Record with ID=%d successfully inserted.\n", temp.id);
 }
 
-void query_record(const char *args, Student *head)
-{
-    Student temp;
-    if (!parse_fields(args, &temp) || temp.id == -1)
-    {
-        printf("CMS: Invalid QUERY format. Required: ID. Example: QUERY ID=123\n");
-        return;
-    }
-
-    while (head)
-    {
-        if (head->id == temp.id)
-        {
-            printf("CMS: Record found.\n");
-            printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
-            printf("%-8d\t%-20s\t%-30s\t%.1f\n", head->id, head->name, head->programme, head->mark);
-            return;
-        }
-
-        head = head->next;
-    }
-
-    printf("CMS: Record with ID=%d not found.\n", temp.id);
-}
-
 void show_all_records(Student *head)
 {
     if (!head)
@@ -93,6 +69,94 @@ void show_all_records(Student *head)
     {
         printf("%-8d\t%-20s\t%-30s\t%.1f\n", head->id, head->name, head->programme, head->mark);
         head = head->next;
+    }
+}
+
+void query_record(const char *args, Student *head) {
+    if (!args || strlen(args) == 0) {
+        printf("CMS: Invalid QUERY format. Examples:\n");
+        printf("  QUERY ID=123\n");
+        printf("  QUERY Name=Joshua\n");
+        printf("  QUERY Programme=Software Engineering\n");
+        return;
+    }
+
+    // Parse the fields from the arguments
+    Student temp;
+    parse_fields(args, &temp);
+
+    // Determine what you are searching by; ID, Name, Programme (special features for Query)
+    int searchByID = (temp.id != -1);
+    int searchByName = (strlen(temp.name) > 0);
+    int searchByProgramme = (strlen(temp.programme) > 0);
+
+    // Special features for Query: prompt an example if command is invalid
+    if (!searchByID && !searchByName && !searchByProgramme) {
+        printf("CMS: No valid search field provided. Examples:\n");
+        printf("  QUERY ID=123\n");
+        printf("  QUERY Name=Joshua Chen\n");
+        printf("  QUERY Programme=Software Engineering\n");
+        return;
+    }
+
+    // matching records
+    Student *current = head;
+    int foundCount = 0;
+
+    printf("\n========================================\n");
+    printf("Search Results:\n");
+    printf("========================================\n");
+
+    while (current != NULL) {
+        int matches = 0;
+
+        // Check if current record matches the search criterias 
+        if (searchByID && current->id == temp.id) {
+            matches = 1;
+        }
+        if (searchByName && strlen(temp.name) > 0) {
+            char currentNameUpper[88], searchNameUpper[88];
+            strcpy(currentNameUpper, current->name);
+            strcpy(searchNameUpper, temp.name);
+            to_upper(currentNameUpper);
+            to_upper(searchNameUpper);
+            
+            if (strstr(currentNameUpper, searchNameUpper) != NULL) {
+                matches = 1;
+            }
+        }
+        if (searchByProgramme && strlen(temp.programme) > 0) {
+            char currentProgUpper[88], searchProgUpper[88];
+            strcpy(currentProgUpper, current->programme);
+            strcpy(searchProgUpper, temp.programme);
+            to_upper(currentProgUpper);
+            to_upper(searchProgUpper);
+            
+            if (strstr(currentProgUpper, searchProgUpper) != NULL) {
+                matches = 1;
+            }
+        }
+
+        if (matches) {
+            if (foundCount > 0) {
+                printf("----------------------------------------\n");
+            }
+            printf("ID          : %d\n", current->id);
+            printf("Name        : %s\n", current->name);
+            printf("Programme   : %s\n", current->programme);
+            printf("Mark        : %.1f\n", current->mark);
+            foundCount++;
+        }
+
+        current = current->next;
+    }
+
+    printf("========================================\n");
+    
+    if (foundCount == 0) {
+        printf("CMS: No records found matching.\n");
+    } else {
+        printf("Total records found: %d\n", foundCount);
     }
 }
 
