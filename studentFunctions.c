@@ -181,7 +181,23 @@ void update_record(const char *args, Student *head)
 
     if (!current)
     {
+        printf("\n");
         printf("CMS: The record with ID=%d does not exist.\n", temp.id);
+        return;
+    }
+
+    if (strlen(temp.programme) == 0 && temp.mark < 0)
+    {
+        printf("\n");
+        printf("========================================\n");
+        printf("CMS: Record with ID=%d exists but no fields provided to update. (Programme or Mark)\n", temp.id);
+        printf("----------------------------------------\n");
+        printf("ID          : %d\n", current->id);
+        printf("Name        : %s\n", current->name);
+        printf("Programme   : %s\n", current->programme);
+        printf("Mark        : %.1f\n", current->mark);
+        printf("========================================\n");
+        printf("Example: UPDATE ID=%d Programme=NewProgramme OR Mark=85.5\n", temp.id);
         return;
     }
 
@@ -195,9 +211,15 @@ void update_record(const char *args, Student *head)
         current->mark = temp.mark;
     }
 
+    printf("\n");
+    printf("========================================\n");
     printf("CMS: The record with ID=%d is successfully updated.\n", temp.id);
-    printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
-    printf("%-8d\t%-20s\t%-30s\t%.1f\n", current->id, current->name, current->programme, current->mark);
+    printf("----------------------------------------\n");
+    printf("ID          : %d\n", current->id);
+    printf("Name        : %s\n", current->name);
+    printf("Programme   : %s\n", current->programme);
+    printf("Mark        : %.1f\n", current->mark);
+    printf("========================================\n");
 }
 
 void show_summary(Student *head)
@@ -239,9 +261,14 @@ void show_summary(Student *head)
 
     averageMark = totalMarks / countStudents;
 
+    printf("\n");
+    printf("========================================\n");
     printf("CMS: Summary of Student Records:\n");
+    printf("----------------------------------------\n");
     printf("Total number of students: %d\n", countStudents);
     printf("Average mark: %.1f\n", averageMark);
     printf("Highest mark: %.1f (Student: %s)\n", highest, highestMark_name);
     printf("Lowest mark: %.1f (Student: %s)\n", lowest, lowestMark_name);
+    printf("========================================\n");
+
 }
