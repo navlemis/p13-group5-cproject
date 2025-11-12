@@ -61,15 +61,19 @@ void show_all_records(Student *head)
         printf("No records loaded.\n");
         return;
     }
-
+    printf("\n");
+    printf("================================================================================\n");
     printf("Here are all the records found in the table \"StudentRecords\".\n");
+    printf("================================================================================\n");
     printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
+    printf("--------------------------------------------------------------------------------\n");
 
     while (head)
     {
         printf("%-8d\t%-20s\t%-30s\t%.1f\n", head->id, head->name, head->programme, head->mark);
         head = head->next;
     }
+    printf("================================================================================\n");
 }
 
 void query_record(const char *args, Student *head) {
