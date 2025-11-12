@@ -3,6 +3,23 @@
 #include <ctype.h>
 #include "parser.h"
 
+void trim_whitespace(char *str) {
+    char *end;
+
+    // Trim leading space
+    while (isspace((unsigned char)*str)) str++;
+
+    if (*str == 0) return; // All spaces
+
+    // Trim trailing space
+    end = str + strlen(str) - 1;
+    while (end > str && isspace((unsigned char)*end)) end--;
+
+    // Write new null terminator
+    *(end + 1) = '\0';
+}
+
+
 int parse_fields(const char *input, Student *tempStudent) {
     if (!tempStudent) return 0;
 

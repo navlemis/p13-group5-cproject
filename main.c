@@ -28,6 +28,7 @@ int main() {
 
         userCommand[strcspn(userCommand, "\n")] = 0;
         to_upper(userCommand);
+        trim_whitespace(userCommand);
 
         if (strcmp(userCommand, "OPEN") == 0) {
             if (load_records(DB_NAME, &head)) {
@@ -42,6 +43,7 @@ int main() {
                     }
 
                     subCommand[strcspn(subCommand, "\n")] = 0;
+                    trim_whitespace(subCommand);
 
                     if (strcmp(subCommand, "SHOW ALL") == 0) {
                         show_all_records(head);
