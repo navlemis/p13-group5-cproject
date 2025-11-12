@@ -5,3 +5,4 @@ Table Name: StudentRecords
 8888	Joe Mama 	Whatever 	88.0
 2002001	Test Test 123 	Computer Science 	22.0
 6969	Elvan 	DSC 	88.0
+9999	Dai Xuan 	Go Home Club 	99.0
