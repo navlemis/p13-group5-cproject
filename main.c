@@ -6,6 +6,7 @@
 #include "parser.h"
 #include "loadSave.h"
 #include "utilities.h"
+#include "delete.h"
 
 #define MAX_INPUT_LENGTH 100
 #define DB_NAME "Sample-CMS.txt"
@@ -73,6 +74,17 @@ int main() {
                             isModified = 1;
                         } else {
                             printf("CMS: Invalid UPDATE format. Example: UPDATE ID=123 Programme=NewProgramme Mark=85.5\n");
+                        }
+                    }
+                    else if (strncmp(subCommand, "DELETE", 6) == 0) {
+                        if (strlen(subCommand) > 7) {
+                            const char *delArgs = subCommand + 7;  
+                            int res = delete_command(delArgs, &head);
+                            if (res == 1) {
+                                isModified = 1; 
+                            }
+                        } else {
+                            printf("CMS: Invalid DELETE format. Example: DELETE ID=2401234\n");
                         }
                     }
                     else if (strcmp(subCommand, "SHOW SUMMARY") == 0) {
