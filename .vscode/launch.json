@@ -6,11 +6,11 @@
       "name": "Run active C file",
       "type": "cppvsdbg",
       "request": "launch",
-      "program": "${fileDirname}/a.exe",
+      "program": "${fileDirname}/cms.exe",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${fileDirname}",
-      "preLaunchTask": "build active C file",
+      "preLaunchTask": "Build CMS Project",
       "environment": [],
       "console": "integratedTerminal"
     }

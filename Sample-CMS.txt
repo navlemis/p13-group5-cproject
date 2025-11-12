@@ -4,3 +4,4 @@ Table Name: StudentRecords
 2304567	John Levoy	Digital Supply Chain	85.9
 8888	Joe Mama 	Whatever 	88.0
 2002001	Test Test 123 	Computer Science 	22.0
+6969	Elvan 	DSC 	88.0
