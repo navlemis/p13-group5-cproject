@@ -18,8 +18,9 @@ void display_menu() {
     printf("2. INSERT ID=(id) Name=(Name) Programme=(programme) Mark=(mark) - Insert a new record into the database.\n");
     printf("3. QUERY ID=(id) - Search for a student record by ID.\n");
     printf("4. UPDATE ID=(id) Programme=(programme to update) Mark=(mark to update) - Update Programme and/or Mark for an existing record.\n");
-    printf("5. SAVE - Save changes to the database file after making edits.\n");
-    printf("6. QUIT - Exit the program.\n");
+    printf("5. SHOW SUMMARY - Display a summary statistics of the student records.\n");
+    printf("6. SAVE - Save changes to the database file after making edits.\n");
+    printf("7. QUIT - Exit the program.\n");
     printf("Please enter a command (Case Sensitive): ");
 }
 

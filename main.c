@@ -75,6 +75,9 @@ int main() {
                             printf("CMS: Invalid UPDATE format. Example: UPDATE ID=123 Programme=NewProgramme Mark=85.5\n");
                         }
                     }
+                    else if (strcmp(subCommand, "SHOW SUMMARY") == 0) {
+                        show_summary(head);
+                    } 
                     else if (strncmp(subCommand, "PARSE TEST", 10) == 0) {
                         if (strlen(subCommand) > 11) {
                             const char *parseArgs = subCommand + 11;

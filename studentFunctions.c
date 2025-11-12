@@ -135,3 +135,49 @@ void update_record(const char *args, Student *head)
     printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
     printf("%-8d\t%-20s\t%-30s\t%.1f\n", current->id, current->name, current->programme, current->mark);
 }
+
+void show_summary(Student *head)
+{
+    if (!head)
+    {
+        printf("CMS: No records available to summarise.\n");
+        return;
+    }
+
+    int countStudents = 0;
+    float totalMarks = 0.0;
+    float averageMark = 0.0;
+    float highest = head->mark;
+    float lowest = head->mark;
+    char highestMark_name[88];
+    char lowestMark_name[88];
+    strcpy(highestMark_name, head->name);
+    strcpy(lowestMark_name, head->name); 
+
+    while (head)
+    {
+        countStudents++;
+        totalMarks += head->mark;
+
+        if (head->mark > highest)
+        {
+            highest = head->mark;
+            strcpy(highestMark_name, head->name);
+        }
+
+        if (head->mark < lowest)
+        {
+            lowest = head->mark;
+            strcpy(lowestMark_name, head->name);
+        }
+        head = head->next;
+    }
+
+    averageMark = totalMarks / countStudents;
+
+    printf("CMS: Summary of Student Records:\n");
+    printf("Total number of students: %d\n", countStudents);
+    printf("Average mark: %.1f\n", averageMark);
+    printf("Highest mark: %.1f (Student: %s)\n", highest, highestMark_name);
+    printf("Lowest mark: %.1f (Student: %s)\n", lowest, lowestMark_name);
+}

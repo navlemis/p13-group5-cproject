@@ -17,5 +17,6 @@ void query_record(const char *args, Student *head);
 void show_all_records(Student *head);
 void update_record(const char *args, Student *head);
 int count_records(Student *head);
+void show_summary(Student *head);
 
 #endif
