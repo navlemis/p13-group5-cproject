@@ -5,4 +5,4 @@
 
 int delete_command(const char *args, Student **head);
 
-#endif // DELETE_H
+#endif 
