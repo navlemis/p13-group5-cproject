@@ -20,3 +20,8 @@ int count_records(Student *head);
 void show_summary(Student *head);
 
 #endif
+
+
+// Prototype for delete command (originally in delete.h)
+int delete_command(const char *args, Student **head);
+
