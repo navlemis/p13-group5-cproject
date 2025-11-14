@@ -312,8 +312,7 @@ int main()
             continue;
         }
 
-        userCommand[strcspn(userCommand, "\n")] = 0;
-        to_upper(userCommand);
+    userCommand[strcspn(userCommand, "\n")] = 0;
 
         if (strcmp(userCommand, "OPEN") == 0)
         {

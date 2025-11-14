@@ -25,8 +25,7 @@ int main() {
             continue;
         }
 
-        userCommand[strcspn(userCommand, "\n")] = 0;
-        to_upper(userCommand);
+    userCommand[strcspn(userCommand, "\n")] = 0;
 
         if (strcmp(userCommand, "OPEN") == 0) {
             if (load_records(DB_NAME, &head)) {
@@ -42,8 +41,24 @@ int main() {
 
                     subCommand[strcspn(subCommand, "\n")] = 0;
 
-                    if (strcmp(subCommand, "SHOW ALL") == 0) {
-                        show_all_records(head);
+                    if (strncmp(subCommand, "SHOW ALL", 8) == 0) {
+                        /* support optional: SHOW ALL SORT BY <ID|MARK> (ascending only) */
+                        char *sortPtr = strstr(subCommand, "SORT BY");
+                        if (sortPtr) {
+                            sortPtr += strlen("SORT BY");
+                            while (*sortPtr == ' ') sortPtr++;
+                            char field[16] = {0};
+                            char order[16] = {0};
+                            sscanf(sortPtr, "%15s %15s", field, order);
+                            if (strlen(order) == 0) strcpy(order, "ASC");
+                            if ((strcmp(field, "ID") == 0) || (strcmp(field, "MARK") == 0)) {
+                                show_all_sorted(head, field, order);
+                            } else {
+                                printf("Invalid SORT field. Use ID or MARK (case-sensitive).\n");
+                            }
+                        } else {
+                            show_all_records(head);
+                        }
                     }
                     else if (strcmp(subCommand, "QUIT") == 0) {
                         printf("Exiting the CMS Database System. Goodbye!\n");

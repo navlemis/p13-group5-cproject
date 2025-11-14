@@ -15,12 +15,13 @@ void display_menu() {
     printf("\n-------------------------------\n");
     printf("CMS Database System Commands:\n");
     printf("1. SHOW ALL - Display all contents in the database table.\n");
-    printf("2. INSERT ID=(id) Name=(Name) Programme=(programme) Mark=(mark) - Insert a new record into the database.\n");
-    printf("3. QUERY - Search for a student record by ID,Name,Programmes.\n");
-    printf("4. UPDATE ID=(id) Programme=(programme to update) Mark=(mark to update) - Update Programme and/or Mark for an existing record.\n");
-    printf("5. SHOW SUMMARY - Display a summary statistics of the student records.\n");
-    printf("6. SAVE - Save changes to the database file after making edits.\n");
-    printf("7. QUIT - Exit the program.\n");
+    printf("2. SHOW ALL SORT BY <ID|MARK> [DESC] - Display sorted view by ID or Mark (ASC or optional DESC).\n");
+    printf("3. INSERT ID=(id) Name=(Name) Programme=(programme) Mark=(mark) - Insert a new record into the database.\n");
+    printf("4. QUERY ID=(id) Programme=(Programme) Name=(Name) - Search for a student record by ID, Name, or Programme.\n");
+    printf("5. UPDATE ID=(id) Programme=(programme to update) Mark=(mark to update) - Update Programme and/or Mark for an existing record.\n");
+    printf("6. SHOW SUMMARY - Display a summary statistics of the student records.\n");
+    printf("7. SAVE - Save changes to the database file after making edits.\n");
+    printf("8. QUIT - Exit the program.\n");
     printf("Please enter a command (Case Sensitive): ");
 }
 
