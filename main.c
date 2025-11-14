@@ -9,10 +9,12 @@
 //#include "delete.h"
 
 #define MAX_INPUT_LENGTH 100
-#define DB_NAME "Sample-CMS.txt"
+//#define DB_NAME "Sample-CMS.txt"
 
 int main() {
     char userCommand[MAX_INPUT_LENGTH];
+    char userCommand1[16];
+    char userCommand2[129];
     Student *head = NULL;
     int isModified = 0;
 
@@ -21,19 +23,22 @@ int main() {
     printf("Welcome to the CMS Database System.\n");
 
     while (1) {
-        printf("\nEnter command (OPEN or QUIT): ");
+        printf("\nEnter command OPEN \"test.txt\" to open a .txt file or QUIT to quit the program : ");
         if (fgets(userCommand, sizeof(userCommand), stdin) == NULL) {
             printf("Input error.\n");
             continue;
         }
 
         userCommand[strcspn(userCommand, "\n")] = 0;
-        to_upper(userCommand);
+        //to_upper(userCommand);
         trim_whitespace(userCommand);
+        sscanf(userCommand, "%15s %128s", userCommand1, userCommand2);
+        to_upper(userCommand1);
 
-        if (strcmp(userCommand, "OPEN") == 0) {
-            if (load_records(DB_NAME, &head)) {
-                printf("The database file \"%s\" is successfully opened.\n", DB_NAME);
+
+        if (strcmp(userCommand1, "OPEN") == 0) {
+            if (load_records(userCommand2, &head)) {
+                printf("The database file \"%s\" is successfully opened.\n", userCommand2);
 
                 char subCommand[MAX_INPUT_LENGTH];
                 while (1) {
@@ -109,11 +114,11 @@ int main() {
                         }
                     }
                     else if (strncmp(subCommand, "SAVE", 4) == 0) {
-                        if (save_records(DB_NAME, head)) {
+                        if (save_records(userCommand2, head)) {
                             isModified = 0;
-                            printf("CMS: Changes saved to \"%s\" successfully.\n", DB_NAME);
+                            printf("CMS: Changes saved to \"%s\" successfully.\n", userCommand2);
                         } else {
-                            printf("CMS: Failed to save changes to \"%s\".\n", DB_NAME);
+                            printf("CMS: Failed to save changes to \"%s\".\n", userCommand2);
                         }
                     }
                     else {
@@ -121,15 +126,15 @@ int main() {
                     }
                 }
             } else {
-                printf("CMS: Failed to open database file \"%s\".\n", DB_NAME);
+                printf("CMS: Failed to open database file \"%s\".\n", userCommand2);
             }
         }
-        else if (strcmp(userCommand, "QUIT") == 0) {
+        else if (strcmp(userCommand1, "QUIT") == 0) {
             printf("Exiting the CMS Database System. Goodbye!\n");
             return 0;
         }
         else {
-            handle_unknown(userCommand);
+            handle_unknown(userCommand1);
         }
     }
 

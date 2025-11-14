@@ -1,0 +1,8 @@
+Database Name: Test-CMS-Database
+Authors: ELVAN SIM WEI HAN
+
+Table Name: ProfessorRecords
+ID	Name		Programme		Mark
+8881234	Oran	Software Engineering	70.5
+8801234	Zhang	Computer Science	63.4
+8814567	John Levoy	Digital Supply Chain	85.9

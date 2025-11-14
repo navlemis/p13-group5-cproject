@@ -62,6 +62,8 @@ void show_all_records(Student *head)
         printf("No records loaded.\n");
         return;
     }
+
+    
     printf("\n");
     printf("================================================================================\n");
     printf("Here are all the records found in the table \"StudentRecords\".\n");
