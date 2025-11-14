@@ -18,10 +18,9 @@ void show_all_records(Student *head);
 void update_record(const char *args, Student *head);
 int count_records(Student *head);
 void show_summary(Student *head);
+int delete_command(const char *args, Student **head);
 
 #endif
 
 
-// Prototype for delete command (originally in delete.h)
-int delete_command(const char *args, Student **head);
 

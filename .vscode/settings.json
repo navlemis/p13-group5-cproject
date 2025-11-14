@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "studentfunctions.h": "c",
+        "utilities.h": "c"
     }
 }

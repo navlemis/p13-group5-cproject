@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <string.h>
 #include "studentFunctions.h"
 #include "parser.h"
 #include "utilities.h"
-#include "delete.h"
 
 void insert_record(const char *args, Student **head) 
 {
@@ -279,7 +279,6 @@ void show_summary(Student *head)
 }
 
 
-#include <ctype.h>
 
 static inline void trim_eol(char *s) {
     if (!s) return;

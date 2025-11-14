@@ -6,7 +6,7 @@
 #include "parser.h"
 #include "loadSave.h"
 #include "utilities.h"
-#include "delete.h"
+//#include "delete.h"
 
 #define MAX_INPUT_LENGTH 100
 #define DB_NAME "Sample-CMS.txt"
@@ -15,6 +15,7 @@ int main() {
     char userCommand[MAX_INPUT_LENGTH];
     Student *head = NULL;
     int isModified = 0;
+
 
     display_declaration();
     printf("Welcome to the CMS Database System.\n");
