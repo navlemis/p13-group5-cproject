@@ -4,19 +4,27 @@
 #include "parser.h"
 
 void trim_whitespace(char *str) {
+    char *start = str;
     char *end;
 
-    // Trim leading space
-    while (isspace((unsigned char)*str)) str++;
+    // Find first non-space character
+    while (isspace((unsigned char)*start)) start++;
 
-    if (*str == 0) return; // All spaces
+    // If the string is all spaces, make it empty
+    if (*start == '\0') {
+        *str = '\0';
+        return;
+    }
 
-    // Trim trailing space
-    end = str + strlen(str) - 1;
-    while (end > str && isspace((unsigned char)*end)) end--;
-
-    // Write new null terminator
+    // Trim trailing space from the trimmed start
+    end = start + strlen(start) - 1;
+    while (end > start && isspace((unsigned char)*end)) end--;
     *(end + 1) = '\0';
+
+    // If there were leading spaces, shift the trimmed content to the front
+    if (start != str) {
+        memmove(str, start, (end - start) + 2); // include null terminator
+    }
 }
 
 

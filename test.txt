@@ -1,5 +1,5 @@
-Database Name: Test-CMS-Database
-Authors: ELVAN SIM WEI HAN
+Database Name: Sample-CMS
+Authors: Assistant Prof Oran Zane Devilly
 
 Table Name: ProfessorRecords
 ID	Name	Programme	Mark

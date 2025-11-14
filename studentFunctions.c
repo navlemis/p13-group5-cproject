@@ -90,7 +90,7 @@ void show_all_records(Student *head, char *tableName)
     }
     printf("================================================================================\n");
 }
-
+// Query
 void query_record(const char *args, Student *head) {
     if (!args || strlen(args) == 0) {
         printf("CMS: Invalid QUERY format. Examples:\n");
@@ -178,6 +178,7 @@ void query_record(const char *args, Student *head) {
         printf("Total records found: %d\n", foundCount);
     }
 }
+// end of Query
 
 void update_record(const char *args, Student *head)
 {
@@ -292,6 +293,76 @@ void show_summary(Student *head)
 
 }
 
+// Sorting Function
+static int cmp_id_asc(const void *a, const void *b) {
+    const Student *A = *(const Student * const *)a;
+    const Student *B = *(const Student * const *)b;
+    return (A->id > B->id) - (A->id < B->id);
+}
+
+static int cmp_id_desc(const void *a, const void *b) {
+    return -cmp_id_asc(a,b);
+}
+
+static int cmp_mark_asc(const void *a, const void *b) {
+    const Student *A = *(const Student * const *)a;
+    const Student *B = *(const Student * const *)b;
+    if (A->mark < B->mark) return -1;
+    if (A->mark > B->mark) return 1;
+    return 0;
+}
+
+static int cmp_mark_desc(const void *a, const void *b) {
+    return -cmp_mark_asc(a,b);
+}
+
+void show_all_sorted(Student *head, const char *field, const char *order)
+{
+    if (!head) {
+        printf("No records loaded.\n");
+        return;
+    }
+
+    /* count nodes */
+    int count = 0;
+    Student *cur = head;
+    while (cur) { count++; cur = cur->next; }
+
+    /* build array of pointers */
+    Student **arr = malloc(sizeof(Student*) * count);
+    if (!arr) { printf("CMS: Memory allocation error.\n"); return; }
+    cur = head; int idx = 0;
+    while (cur) { arr[idx++] = cur; cur = cur->next; }
+
+    /* decide comparator by field (case-sensitive: ID or MARK expected) and order (ASC/DESC) */
+    const char *ord = (order && strlen(order) > 0) ? order : "ASC";
+
+    if (field && strcmp(field, "ID") == 0) {
+        if (strcmp(ord, "DESC") == 0) qsort(arr, count, sizeof(Student*), cmp_id_desc);
+        else qsort(arr, count, sizeof(Student*), cmp_id_asc);
+    } else if (field && strcmp(field, "MARK") == 0) {
+        if (strcmp(ord, "DESC") == 0) qsort(arr, count, sizeof(Student*), cmp_mark_desc);
+        else qsort(arr, count, sizeof(Student*), cmp_mark_asc);
+    } else {
+        /* unknown, default to ID ascending */
+        qsort(arr, count, sizeof(Student*), cmp_id_asc);
+    }
+
+    /* print header and rows */
+    printf("\n");
+    printf("=====================================================\n");
+    printf("Here are all the records found in the table \"Student Records\" (sorted by %s %s).\n", (field?field:"ID"), ord);
+    printf("=====================================================\n");
+    printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
+    printf("-----------------------------------------------------\n");
+    for (int i = 0; i < count; ++i) {
+        Student *s = arr[i];
+        printf("%-8d\t%-20s\t%-30s\t%.1f\n", s->id, s->name, s->programme, s->mark);
+    }
+    printf("=====================================================\n");
+
+    free(arr);
+}
 
 
 static inline void trim_eol(char *s) {
@@ -356,5 +427,3 @@ int delete_command(const char *args, Student **head) {
         return 0;
     }
 }
-
-
