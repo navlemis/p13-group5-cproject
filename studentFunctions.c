@@ -280,3 +280,138 @@ void show_summary(Student *head)
     printf("========================================\n");
 
 }
+
+// Sorting Function
+static int cmp_id_asc(const void *a, const void *b) {
+    const Student *A = *(const Student * const *)a;
+    const Student *B = *(const Student * const *)b;
+    return (A->id > B->id) - (A->id < B->id);
+}
+
+static int cmp_id_desc(const void *a, const void *b) {
+    return -cmp_id_asc(a,b);
+}
+
+static int cmp_mark_asc(const void *a, const void *b) {
+    const Student *A = *(const Student * const *)a;
+    const Student *B = *(const Student * const *)b;
+    if (A->mark < B->mark) return -1;
+    if (A->mark > B->mark) return 1;
+    return 0;
+}
+
+static int cmp_mark_desc(const void *a, const void *b) {
+    return -cmp_mark_asc(a,b);
+}
+
+void show_all_sorted(Student *head, const char *field, const char *order)
+{
+    if (!head) {
+        printf("No records loaded.\n");
+        return;
+    }
+
+    /* count nodes */
+    int count = 0;
+    Student *cur = head;
+    while (cur) { count++; cur = cur->next; }
+
+    /* build array of pointers */
+    Student **arr = malloc(sizeof(Student*) * count);
+    if (!arr) { printf("CMS: Memory allocation error.\n"); return; }
+    cur = head; int idx = 0;
+    while (cur) { arr[idx++] = cur; cur = cur->next; }
+
+    /* decide comparator by field (case-sensitive: ID or MARK expected) and order (ASC/DESC) */
+    const char *ord = (order && strlen(order) > 0) ? order : "ASC";
+
+    if (field && strcmp(field, "ID") == 0) {
+        if (strcmp(ord, "DESC") == 0) qsort(arr, count, sizeof(Student*), cmp_id_desc);
+        else qsort(arr, count, sizeof(Student*), cmp_id_asc);
+    } else if (field && strcmp(field, "MARK") == 0) {
+        if (strcmp(ord, "DESC") == 0) qsort(arr, count, sizeof(Student*), cmp_mark_desc);
+        else qsort(arr, count, sizeof(Student*), cmp_mark_asc);
+    } else {
+        /* unknown, default to ID ascending */
+        qsort(arr, count, sizeof(Student*), cmp_id_asc);
+    }
+
+    /* print header and rows */
+    printf("\n");
+    printf("=====================================================\n");
+    printf("Here are all the records found in the table \"Student Records\" (sorted by %s %s).\n", (field?field:"ID"), ord);
+    printf("=====================================================\n");
+    printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
+    printf("-----------------------------------------------------\n");
+    for (int i = 0; i < count; ++i) {
+        Student *s = arr[i];
+        printf("%-8d\t%-20s\t%-30s\t%.1f\n", s->id, s->name, s->programme, s->mark);
+    }
+    printf("=====================================================\n");
+
+    free(arr);
+}
+
+
+static inline void trim_eol(char *s) {
+    if (!s) return;
+    size_t n = strlen(s);
+    while (n && (s[n-1] == '\n' || s[n-1] == '\r')) s[--n] = '\0';
+}
+
+
+static int delete_record_by_id(Student **head, int id) {
+    if (!head || !*head) return 0;
+    Student **pp = head;
+    while (*pp && (*pp)->id != id) {
+        pp = &(*pp)->next;
+    }
+    if (!*pp) return 0;
+    Student *victim = *pp;
+    *pp = victim->next;
+    free(victim);
+    return 1;
+}
+
+
+int delete_command(const char *args, Student **head) {
+    if (!args || !head) return -1;
+
+    Student tmp;
+    tmp.id = -1; tmp.mark = -1.0f;
+    tmp.name[0] = '\0'; tmp.programme[0] = '\0';
+
+    if (!parse_fields(args, &tmp) || tmp.id == -1) {
+        printf("CMS: Invalid DELETE format. Example: DELETE ID=2401234\n");
+        return -1;
+    }
+
+    Student *cur = *head;
+    while (cur && cur->id != tmp.id) cur = cur->next;
+    if (!cur) {
+        printf("CMS: The record with ID=%d does not exist.\n", tmp.id);
+        return 0;
+    }
+
+    printf("CMS: Are you sure you want to delete record with ID=%d? Type \"Y\" to Confirm or type \"N\" to cancel.\n", tmp.id);
+    char yn[16];
+    if (!fgets(yn, sizeof(yn), stdin)) {
+        printf("CMS: The deletion is cancelled.\n");
+        return 0;
+    }
+    trim_eol(yn);
+    to_upper(yn);
+
+    if (yn[0] != 'Y') {
+        printf("CMS: The deletion is cancelled.\n");
+        return 0;
+    }
+
+    if (delete_record_by_id(head, tmp.id)) {
+        printf("CMS: The record with ID=%d is successfully deleted.\n", tmp.id);
+        return 1;
+    } else {
+        printf("CMS: The record with ID=%d does not exist.\n", tmp.id);
+        return 0;
+    }
+}

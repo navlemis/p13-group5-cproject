@@ -1,8 +1,8 @@
-Database Name: Test-CMS-Database
-Authors: ELVAN SIM WEI HAN
+Database Name: Sample-CMS
+Authors: Assistant Prof Oran Zane Devilly
 
-Table Name: ProfessorRecords
-ID	Name		Programme		Mark
-8881234	Oran	Software Engineering	70.5
-8801234	Zhang	Computer Science	63.4
-8814567	John Levoy	Digital Supply Chain	85.9
+Table Name: StudentRecords
+ID	Name	Programme	Mark
+2301234	Joshua Chen	Software Engineering	70.5
+2201234	Isaac Teo	Computer Science	63.4
+2304567	John Levoy	Digital Supply Chain	85.9
