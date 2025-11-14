@@ -14,11 +14,12 @@ typedef struct Student {
 //calling the functions from .c counterpart
 void insert_record(const char *args, Student **head);
 void query_record(const char *args, Student *head);
-void show_all_records(Student *head);
+void show_all_records(Student *head, char *tableName);
 void update_record(const char *args, Student *head);
 int count_records(Student *head);
 void show_summary(Student *head);
 int delete_command(const char *args, Student **head);
+void free_records(Student *head);
 
 #endif
 

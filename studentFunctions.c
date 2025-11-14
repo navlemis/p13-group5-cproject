@@ -6,6 +6,18 @@
 #include "parser.h"
 #include "utilities.h"
 
+void free_records(Student *head)
+{
+    Student *temp;
+    while (head)
+    {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+}
+
+
 void insert_record(const char *args, Student **head) 
 {
     Student temp; //temp student that holds parsed data
@@ -55,7 +67,7 @@ void insert_record(const char *args, Student **head)
     printf("CMS: Record with ID=%d successfully inserted.\n", temp.id);
 }
 
-void show_all_records(Student *head)
+void show_all_records(Student *head, char *tableName)
 {
     if (!head)
     {
@@ -66,7 +78,7 @@ void show_all_records(Student *head)
     
     printf("\n");
     printf("================================================================================\n");
-    printf("Here are all the records found in the table \"StudentRecords\".\n");
+    printf("Here are all the records found in the table %s.\n", tableName);
     printf("================================================================================\n");
     printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
     printf("--------------------------------------------------------------------------------\n");

@@ -21,7 +21,8 @@ void display_menu() {
     printf("5. DELETE ID=(id) - Delete a student record from the database.\n");
     printf("6. SHOW SUMMARY - Display a summary statistics of the student records.\n");
     printf("7. SAVE - Save changes to the database file after making edits.\n");
-    printf("8. QUIT - Exit the program.\n");
+    printf("8. BACK - Goes back to landing menu to load another file or quit program.\n");
+    printf("9. QUIT - Exit the program.\n");
     printf("Please enter a command (Case Sensitive): ");
 }
 

@@ -15,6 +15,7 @@ int main() {
     char userCommand[MAX_INPUT_LENGTH];
     char userCommand1[16];
     char userCommand2[129];
+    char currentTableName[128] = "";
     Student *head = NULL;
     int isModified = 0;
 
@@ -37,7 +38,7 @@ int main() {
 
 
         if (strcmp(userCommand1, "OPEN") == 0) {
-            if (load_records(userCommand2, &head)) {
+            if (load_records(userCommand2, &head, currentTableName)) {
                 printf("The database file \"%s\" is successfully opened.\n", userCommand2);
 
                 char subCommand[MAX_INPUT_LENGTH];
@@ -52,7 +53,14 @@ int main() {
                     trim_whitespace(subCommand);
 
                     if (strcmp(subCommand, "SHOW ALL") == 0) {
-                        show_all_records(head);
+                        show_all_records(head, currentTableName);
+                    }
+
+                    else if(strcmp(subCommand, "BACK") == 0)
+                    {
+                        free_records(head);
+                        head = NULL;
+                        break;
                     }
                     else if (strcmp(subCommand, "QUIT") == 0) {
                         printf("Exiting the CMS Database System. Goodbye!\n");

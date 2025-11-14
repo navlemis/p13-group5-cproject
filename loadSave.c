@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include "loadSave.h"
 
-int load_records(const char *filename, Student **head) {
+int load_records(const char *filename, Student **head, char *tableName) {
     FILE *file = fopen(filename, "r");
     if (!file) return 0;
 
@@ -15,6 +15,7 @@ int load_records(const char *filename, Student **head) {
         line[strcspn(line, "\n")] = 0;
 
         if (strncmp(line, "Table Name:", 11) == 0) {
+            sscanf(line, "Table Name: %127[^\n]", tableName);
             inTable = 1;
             continue;
         }
