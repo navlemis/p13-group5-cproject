@@ -74,7 +74,7 @@ int main() {
                                 printf("Invalid SORT field. Use ID or MARK (case-sensitive).\n");
                             }
                         } else {
-                            show_all_records(head);
+                            show_all_records(head, currentTableName);
                         }
                     }
                     else if (strcmp(subUpper, "QUIT") == 0) {
