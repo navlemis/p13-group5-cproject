@@ -5,6 +5,10 @@
 #include "studentFunctions.h"
 #include "parser.h"
 #include "utilities.h"
+#include <stdlib.h>
+#include <time.h>
+
+LogEntry *logHead = NULL; //for logging
 
 void free_records(Student *head)
 {
@@ -21,12 +25,20 @@ void free_records(Student *head)
 void insert_record(const char *args, Student **head) 
 {
     Student temp; //temp student that holds parsed data
-    if (!parse_fields(args, &temp))
+    if (!parse_fields(args, &temp)) //parses the fields from args into temp student
     {
-        //failed parsing returns error message, unlikely to reach here
-        printf("CMS: Failed to parse INSERT fields.\n");
+        /*
+        printf("Parsed ID=%d\n", temp.id);
+        printf("Parsed Mark=%.2f\n", temp.mark);
+        printf("Parsed Name=%s\n", temp.name);
+        printf("Parsed Programme=%s\n", temp.programme);
+        */
+
+        //failed parsing returns error message
+        printf("CMS: Failed to parse INSERT fields. Check your formatting please!\n");
         return;
     }
+
 
     if (temp.id == -1 || strlen(temp.name) == 0 || strlen(temp.programme) == 0 || temp.mark < 0)
     {
@@ -48,9 +60,9 @@ void insert_record(const char *args, Student **head)
         current = current->next; //moves to next student in linkedlist, eventually stopps at null which comes after the end of last item in the linkedlist
     }
 
-    Student *newNode = malloc(sizeof(Student));
-    *newNode = temp;
-    newNode->next = NULL;
+    Student *newNode = malloc(sizeof(Student)); //alloc memory for newnode
+    *newNode = temp; //temp student data copied into new node
+    newNode->next = NULL; //points to next pointer as null to indicate last item
 
     if (*head == NULL)
     {
@@ -393,10 +405,12 @@ int delete_command(const char *args, Student **head) {
     temp.id = -1; temp.mark = -1.0f;
     temp.name[0] = '\0'; temp.programme[0] = '\0';
 
+    
     if (!parse_fields(args, &temp) || temp.id == -1) {
         printf("CMS: Invalid DELETE format. Example: DELETE ID=2401234\n");
         return -1;
     }
+    
 
     Student *cur = *head;
     while (cur && cur->id != temp.id) cur = cur->next;
@@ -426,4 +440,38 @@ int delete_command(const char *args, Student **head) {
         printf("CMS: The record with ID=%d does not exist.\n", temp.id);
         return 0;
     }
+}
+
+void log_command(const char *command)
+{
+  
+    LogEntry *newEntry = malloc(sizeof(LogEntry));
+    if (!newEntry) return;
+
+    time_t now = time(NULL);
+    struct tm *t = localtime(&now);
+    strftime(newEntry->timestamp, sizeof(newEntry->timestamp), "%d-%m-%Y %H:%M:%S", t);
+    snprintf(newEntry->command, sizeof(newEntry->command), "%s", command);
+
+    newEntry->next = logHead;
+    logHead = newEntry;
+}
+
+void export_log(const char *filename)
+{
+  
+    FILE *fp = fopen(filename, "w");
+    if (!fp) {
+        printf("CMS: Failed to export log.\n");
+        return;
+    }
+
+    LogEntry *curr = logHead;
+    while (curr) {
+        fprintf(fp, "[%s] %s\n", curr->timestamp, curr->command);
+        curr = curr->next;
+    }
+
+    fclose(fp);
+    printf("CMS: Session log exported to \"%s\".\n", filename);
 }
