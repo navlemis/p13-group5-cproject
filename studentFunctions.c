@@ -277,14 +277,14 @@ void show_summary(Student *head)
     averageMark = totalMarks / countStudents;
 
     printf("\n");
-    printf("========================================\n");
+    printf("================================================================================\n");
     printf("CMS: Summary of Student Records:\n");
-    printf("----------------------------------------\n");
-    printf("Total number of students: %d\n", countStudents);
-    printf("Average mark: %.1f\n", averageMark);
-    printf("Highest mark: %.1f (Student: %s)\n", highest, highestMark_name);
-    printf("Lowest mark: %.1f (Student: %s)\n", lowest, lowestMark_name);
-    printf("========================================\n");
+    printf("--------------------------------------------------------------------------------\n");
+    printf("%-30s: %d\n", "Total number of students", countStudents);
+    printf("%-30s: %.1f\n", "Average mark", averageMark);
+    printf("%-30s: %.1f (Student: %s)\n", "Highest mark", highest, highestMark_name);
+    printf("%-30s: %.1f (Student: %s)\n", "Lowest mark", lowest, lowestMark_name);
+    printf("================================================================================\n");
 
 }
 
