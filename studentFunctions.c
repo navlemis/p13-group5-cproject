@@ -122,9 +122,12 @@ void query_record(const char *args, Student *head) {
     Student *current = head;
     int foundCount = 0;
 
-    printf("\n========================================\n");
+    printf("\n");
+    printf("================================================================================\n");
     printf("Search Results:\n");
-    printf("========================================\n");
+    printf("================================================================================\n");
+    printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
+    printf("--------------------------------------------------------------------------------\n");
 
     while (current != NULL) {
         int matches = 0;
@@ -157,20 +160,14 @@ void query_record(const char *args, Student *head) {
         }
 
         if (matches) {
-            if (foundCount > 0) {
-                printf("----------------------------------------\n");
-            }
-            printf("ID          : %d\n", current->id);
-            printf("Name        : %s\n", current->name);
-            printf("Programme   : %s\n", current->programme);
-            printf("Mark        : %.1f\n", current->mark);
+            printf("%-8d\t%-20s\t%-30s\t%.1f\n", current->id, current->name, current->programme, current->mark);
             foundCount++;
         }
 
         current = current->next;
     }
 
-    printf("========================================\n");
+    printf("================================================================================\n");
     
     if (foundCount == 0) {
         printf("CMS: No records found matching.\n");
