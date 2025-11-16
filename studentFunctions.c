@@ -318,18 +318,18 @@ void show_all_sorted(Student *head, const char *field, const char *order)
         return;
     }
 
-    /* count nodes */
+    // count nodes
     int count = 0;
     Student *cur = head;
     while (cur) { count++; cur = cur->next; }
 
-    /* build array of pointers */
+    // build array of pointers
     Student **arr = malloc(sizeof(Student*) * count);
     if (!arr) { printf("CMS: Memory allocation error.\n"); return; }
     cur = head; int idx = 0;
     while (cur) { arr[idx++] = cur; cur = cur->next; }
 
-    /* decide comparator by field (case-sensitive: ID or MARK expected) and order (ASC/DESC) */
+    // decide comparator by field (case-sensitive: ID or MARK expected) and order (ASC/DESC)
     const char *ord = (order && strlen(order) > 0) ? order : "ASC";
 
     if (field && strcmp(field, "ID") == 0) {
@@ -339,11 +339,11 @@ void show_all_sorted(Student *head, const char *field, const char *order)
         if (strcmp(ord, "DESC") == 0) qsort(arr, count, sizeof(Student*), cmp_mark_desc);
         else qsort(arr, count, sizeof(Student*), cmp_mark_asc);
     } else {
-        /* unknown, default to ID ascending */
+        // unknown, default to ID ascending
         qsort(arr, count, sizeof(Student*), cmp_id_asc);
     }
 
-    /* print header and rows */
+    // print header and rows
     printf("\n");
     printf("=====================================================\n");
     printf("Here are all the records found in the table \"Student Records\" (sorted by %s %s).\n", (field?field:"ID"), ord);
