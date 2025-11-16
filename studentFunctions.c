@@ -209,14 +209,13 @@ void update_record(const char *args, Student *head)
     if (strlen(temp.programme) == 0 && temp.mark < 0)
     {
         printf("\n");
-        printf("========================================\n");
+        printf("================================================================================\n");
         printf("CMS: Record with ID=%d exists but no fields provided to update. (Programme or Mark)\n", temp.id);
-        printf("----------------------------------------\n");
-        printf("ID          : %d\n", current->id);
-        printf("Name        : %s\n", current->name);
-        printf("Programme   : %s\n", current->programme);
-        printf("Mark        : %.1f\n", current->mark);
-        printf("========================================\n");
+        printf("================================================================================\n");
+        printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
+        printf("--------------------------------------------------------------------------------\n");
+        printf("%-8d\t%-20s\t%-30s\t%.1f\n", current->id, current->name, current->programme, current->mark);
+        printf("================================================================================\n");
         printf("Example: UPDATE ID=%d Programme=NewProgramme OR Mark=85.5\n", temp.id);
         return;
     }
@@ -232,14 +231,13 @@ void update_record(const char *args, Student *head)
     }
 
     printf("\n");
-    printf("========================================\n");
+    printf("================================================================================\n");
     printf("CMS: The record with ID=%d is successfully updated.\n", temp.id);
-    printf("----------------------------------------\n");
-    printf("ID          : %d\n", current->id);
-    printf("Name        : %s\n", current->name);
-    printf("Programme   : %s\n", current->programme);
-    printf("Mark        : %.1f\n", current->mark);
-    printf("========================================\n");
+    printf("================================================================================\n");
+    printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
+    printf("--------------------------------------------------------------------------------\n");
+    printf("%-8d\t%-20s\t%-30s\t%.1f\n", current->id, current->name, current->programme, current->mark);
+    printf("================================================================================\n");
 }
 
 void show_summary(Student *head)
