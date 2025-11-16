@@ -364,7 +364,7 @@ void show_all_sorted(Student *head, const char *field, const char *order)
     free(arr);
 }
 
-
+// Delete Function
 static inline void trim_eol(char *s) {
     if (!s) return;
     size_t n = strlen(s);
@@ -389,23 +389,23 @@ static int delete_record_by_id(Student **head, int id) {
 int delete_command(const char *args, Student **head) {
     if (!args || !head) return -1;
 
-    Student tmp;
-    tmp.id = -1; tmp.mark = -1.0f;
-    tmp.name[0] = '\0'; tmp.programme[0] = '\0';
+    Student temp;
+    temp.id = -1; temp.mark = -1.0f;
+    temp.name[0] = '\0'; temp.programme[0] = '\0';
 
-    if (!parse_fields(args, &tmp) || tmp.id == -1) {
+    if (!parse_fields(args, &temp) || temp.id == -1) {
         printf("CMS: Invalid DELETE format. Example: DELETE ID=2401234\n");
         return -1;
     }
 
     Student *cur = *head;
-    while (cur && cur->id != tmp.id) cur = cur->next;
+    while (cur && cur->id != temp.id) cur = cur->next;
     if (!cur) {
-        printf("CMS: The record with ID=%d does not exist.\n", tmp.id);
+        printf("CMS: The record with ID=%d does not exist.\n", temp.id);
         return 0;
     }
 
-    printf("CMS: Are you sure you want to delete record with ID=%d? Type \"Y\" to Confirm or type \"N\" to cancel.\n", tmp.id);
+    printf("CMS: Are you sure you want to delete record with ID=%d? Type \"Y\" to Confirm or type \"N\" to cancel.\n", temp.id);
     char yn[16];
     if (!fgets(yn, sizeof(yn), stdin)) {
         printf("CMS: The deletion is cancelled.\n");
@@ -419,11 +419,11 @@ int delete_command(const char *args, Student **head) {
         return 0;
     }
 
-    if (delete_record_by_id(head, tmp.id)) {
-        printf("CMS: The record with ID=%d is successfully deleted.\n", tmp.id);
+    if (delete_record_by_id(head, temp.id)) {
+        printf("CMS: The record with ID=%d is successfully deleted.\n", temp.id);
         return 1;
     } else {
-        printf("CMS: The record with ID=%d does not exist.\n", tmp.id);
+        printf("CMS: The record with ID=%d does not exist.\n", temp.id);
         return 0;
     }
 }
