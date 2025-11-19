@@ -1,0 +1,5 @@
+[16-11-2025 20:58:50] open test.txt
+[16-11-2025 20:58:43] open sample-cms.txt
+[16-11-2025 20:58:30] INSERT ID=111 Name=Elvan Programme=Test Mark=88
+[16-11-2025 20:58:24] INSERT ID=abc Name=Elvan Programme=Test Mark=88
+[16-11-2025 20:58:07] open test.txt

@@ -7,8 +7,11 @@
 int load_records(const char *filename, Student **head, char *tableName)
 {
     FILE *file = fopen(filename, "r");
-    if (!file) return 0;
-
+    if (!file)
+    {
+        printf("Error opening file, are you sure the file exists?\n");
+        return 0;
+    }
     char line[256];
     int inTable = 0;
 
@@ -32,7 +35,9 @@ int load_records(const char *filename, Student **head, char *tableName)
             if (*head == NULL)
             {
                 *head = newNode;
-            } else
+            }
+            
+            else
             {
                 Student *current = *head;
                 while (current->next) current = current->next;
@@ -42,64 +47,38 @@ int load_records(const char *filename, Student **head, char *tableName)
     }
 
     fclose(file);
+
+    if (!inTable)
+    {
+        printf("Table not found. Ensure you are opening the correct .txt file.\n");
+        return 0;
+    }
+
     return 1;
 }
 
 int save_records(const char *filename, Student *head)
 {
-    FILE *fp_in = fopen(filename, "r");
     FILE *fp_out = fopen("temp.txt", "w");
-    if (!fp_in || !fp_out) return 0;
+    if (!fp_out) return 0;
 
-    char line[512];
-    int foundTable = 0;
-    int inTable = 0;
-    
+    // Write table name and header
+    fprintf(fp_out, "Table Name: %s\n", filename); // Or use a stored tableName
+    fprintf(fp_out, "ID\tName\tProgramme\tMark\n");
 
-    while (fgets(line, sizeof(line), fp_in))
+    // Write student records
+    Student *current = head;
+    while (current)
     {
-        // Detect start of table
-        if (!foundTable && strncmp(line, "Table Name:", 11) == 0)
-        {
-            foundTable = 1;
-            fputs(line, fp_out); // Write "Table Name:" line
-
-            // Write new table header
-            fprintf(fp_out, "ID\tName\tProgramme\tMark\n");
-
-            // Write new student records
-            Student *current = head;
-            while (current)
-            {
-                fprintf(fp_out, "%d\t%s\t%s\t%.1f\n",
-                        current->id, current->name, current->programme, current->mark);
-                current = current->next;
-            }
-
-            // Skip old table lines until blank line or EOF
-            while (fgets(line, sizeof(line), fp_in))
-            {
-                if (line[0] == '\n')
-                {
-                    fputs(line, fp_out); // Write the blank line to preserve spacing
-                    break;
-                }
-            }
-
-            inTable = 1;
-            continue;
-        }
-
-        // Copy everything before "Table Name:" or after the blank line
-        if (!inTable)
-        {
-            fputs(line, fp_out);
-        }
+        fprintf(fp_out, "%d\t%s\t%s\t%.1f\n",
+                current->id, current->name, current->programme, current->mark);
+        current = current->next;
     }
 
-    fclose(fp_in);
+    fprintf(fp_out, "\n"); // Optional spacing
+
     fclose(fp_out);
     remove(filename);
     rename("temp.txt", filename);
-    return foundTable;
+    return 1;
 }
