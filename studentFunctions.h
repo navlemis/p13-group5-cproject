@@ -11,12 +11,7 @@ typedef struct Student {
     struct Student *next;
 } Student;
 
-typedef struct LogEntry {
-    char timestamp[64];
-    char command[128];
-    struct LogEntry *next;
-} LogEntry;
-extern LogEntry *logHead;
+
 
 //calling the functions from .c counterpart
 void insert_record(const char *args, Student **head);
