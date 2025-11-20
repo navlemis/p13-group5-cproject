@@ -6,7 +6,7 @@
 #include "parser.h"
 #include "loadSave.h"
 #include "utilities.h"
-//#include "delete.h"
+#include <time.h>
 
 #define MAX_INPUT_LENGTH 100
 #define DB_NAME "Sample-CMS.txt"
@@ -41,7 +41,8 @@ int main() {
         if (strcmp(userCommand1, "OPEN") == 0) {
             if (load_records(userCommand2, &head, currentTableName)) {
                 printf("The database file \"%s\" is successfully opened.\n", userCommand2);
-
+                
+                log_command(userCommand);
                 char subCommand[MAX_INPUT_LENGTH];
                 while (1) {
                     display_menu();
@@ -71,6 +72,7 @@ int main() {
                             if (strlen(order) == 0) strcpy(order, "ASC");
                             if ((strcmp(field, "ID") == 0) || (strcmp(field, "MARK") == 0)) {
                                 show_all_sorted(head, field, order);
+                                log_command(subCommand);
                             } else {
                                 printf("Invalid SORT field. Use ID or MARK (case-sensitive).\n");
                             }
@@ -94,6 +96,14 @@ int main() {
                             }
                         }
                         printf("Exiting the CMS Database System. Goodbye!\n");
+                        
+                        char logFilename[128];
+                        time_t now = time(NULL);
+                        struct tm *t = localtime(&now);
+                        strftime(logFilename, sizeof(logFilename), "session_%Y-%m-%d_%H-%M.txt", t);
+                        char fullPath[128];
+                        sprintf(fullPath, "logs/%s", logFilename);
+                        export_log(fullPath);
 
                         free_records(head);
                         free_records(backupHead);
@@ -107,6 +117,7 @@ int main() {
                             const char *insertArgs = subCommand + 7;
                             backup_records(head, &backupHead);
                             insert_record(insertArgs, &head);
+                            log_command(subCommand);
                             isModified = 1;
                         } else {
                             printf("CMS: Invalid INSERT format. Example: INSERT ID=123 Name=Elvan Programme=CMS Mark=88\n");
@@ -116,6 +127,7 @@ int main() {
                         if (strlen(subCommand) > 6) {
                             const char *queryArgs = subCommand + 6;
                             query_record(queryArgs, head);
+                            log_command(subCommand);
                         } else {
                             printf("CMS: Invalid QUERY format. Example: QUERY ID=123\n");
                         }
@@ -125,6 +137,7 @@ int main() {
                             const char *updateArgs = subCommand + 7;
                             backup_records(head, &backupHead);
                             update_record(updateArgs, head);
+                            log_command(subCommand);
                             isModified = 1;
                         } else {
                             printf("CMS: Invalid UPDATE format. Example: UPDATE ID=123 Programme=NewProgramme Mark=85.5\n");
@@ -137,6 +150,7 @@ int main() {
                             int res = delete_command(delArgs, &head);
                             if (res == 1) {
                                 isModified = 1; 
+                                log_command(subCommand);
                             }
                         } else {
                             printf("CMS: Invalid DELETE format. Example: DELETE ID=2401234\n");
@@ -146,10 +160,12 @@ int main() {
                         int res = undo_last_change(&head, &backupHead);
                         if (res == 1) {
                             isModified = 1;
+                            log_command(subCommand);
                         }
                     }
                     else if (strcmp(subUpper, "SHOW SUMMARY") == 0) {
                         show_summary(head);
+                        log_command(subCommand);
                     } 
                     else if (strncmp(subUpper, "PARSE TEST", 10) == 0) {
                         if (strlen(subCommand) > 11) {
@@ -170,6 +186,7 @@ int main() {
                         if (save_records(userCommand2, head)) {
                             isModified = 0;
                             printf("CMS: Changes saved to \"%s\" successfully.\n", userCommand2);
+                            log_command(subCommand);
                         } else {
                             printf("CMS: Failed to save changes to \"%s\".\n", userCommand2);
                         }
