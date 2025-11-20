@@ -11,6 +11,8 @@ typedef struct Student {
     struct Student *next;
 } Student;
 
+
+
 //calling the functions from .c counterpart
 void insert_record(const char *args, Student **head);
 void query_record(const char *args, Student *head);
@@ -25,6 +27,3 @@ void backup_records(Student *head, Student **backupHead);
 int undo_last_change(Student **head, Student **backupHead);
 
 #endif
-
-
-
