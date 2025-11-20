@@ -431,14 +431,14 @@ static inline void trim_eol(char *s) {
 
 static int delete_record_by_id(Student **head, int id) {
     if (!head || !*head) return 0;
-    Student **pp = head;
-    while (*pp && (*pp)->id != id) {
-        pp = &(*pp)->next;
+    Student **ptrToPtr = head;
+    while (*ptrToPtr && (*ptrToPtr)->id != id) {
+        ptrToPtr = &(*ptrToPtr)->next;
     }
-    if (!*pp) return 0;
-    Student *victim = *pp;
-    *pp = victim->next;
-    free(victim);
+    if (!*ptrToPtr) return 0;
+    Student *to_delete = *ptrToPtr;
+    *ptrToPtr = to_delete->next;
+    free(to_delete);
     return 1;
 }
 
