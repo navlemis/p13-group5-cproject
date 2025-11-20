@@ -1,2 +1,0 @@
-[17-11-2025 20:37:43] INSERT ID=81A Name=Elvan Programme=DSC Mark=81aa
-[17-11-2025 20:37:32] open test.txt

@@ -1,5 +1,0 @@
-[19-11-2025 22:40:48] save
-[19-11-2025 22:40:39] insert ID=111 Name=Elvan Programme=ABC Mark=88
-[19-11-2025 22:40:38] insert ID=111 Name=Elvan Programme=ABC Mark=88a
-[19-11-2025 22:40:27] insert id=111 name=elvan programme=abc mark=88
-[19-11-2025 22:40:05] open test.txt
