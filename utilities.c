@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 #include "utilities.h"
 
 // Converts a string to uppercase
@@ -9,6 +10,7 @@ void to_upper(char *str) {
         str[i] = toupper((unsigned char) str[i]);
     }
 }
+
 
 // Displays the CMS command menu
 void display_menu() {

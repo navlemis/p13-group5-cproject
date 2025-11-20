@@ -5,6 +5,10 @@
 #include "studentFunctions.h"
 #include "parser.h"
 #include "utilities.h"
+#include <stdlib.h>
+#include <time.h>
+
+LogEntry *logHead = NULL; //for logging
 
 void free_records(Student *head)
 {
@@ -21,12 +25,20 @@ void free_records(Student *head)
 void insert_record(const char *args, Student **head) 
 {
     Student temp; //temp student that holds parsed data
-    if (!parse_fields(args, &temp))
+    if (!parse_fields(args, &temp)) //parses the fields from args into temp student
     {
-        //failed parsing returns error message, unlikely to reach here
-        printf("CMS: Failed to parse INSERT fields.\n");
+        /*
+        printf("Parsed ID=%d\n", temp.id);
+        printf("Parsed Mark=%.2f\n", temp.mark);
+        printf("Parsed Name=%s\n", temp.name);
+        printf("Parsed Programme=%s\n", temp.programme);
+        */
+
+        //failed parsing returns error message
+        printf("CMS: Failed to parse INSERT fields. Check your formatting please!\n");
         return;
     }
+
 
     if (temp.id == -1 || strlen(temp.name) == 0 || strlen(temp.programme) == 0 || temp.mark < 0)
     {
@@ -48,9 +60,9 @@ void insert_record(const char *args, Student **head)
         current = current->next; //moves to next student in linkedlist, eventually stopps at null which comes after the end of last item in the linkedlist
     }
 
-    Student *newNode = malloc(sizeof(Student));
-    *newNode = temp;
-    newNode->next = NULL;
+    Student *newNode = malloc(sizeof(Student)); //alloc memory for newnode
+    *newNode = temp; //temp student data copied into new node
+    newNode->next = NULL; //points to next pointer as null to indicate last item
 
     if (*head == NULL)
     {
@@ -122,9 +134,12 @@ void query_record(const char *args, Student *head) {
     Student *current = head;
     int foundCount = 0;
 
-    printf("\n========================================\n");
+    printf("\n");
+    printf("================================================================================\n");
     printf("Search Results:\n");
-    printf("========================================\n");
+    printf("================================================================================\n");
+    printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
+    printf("--------------------------------------------------------------------------------\n");
 
     while (current != NULL) {
         int matches = 0;
@@ -157,20 +172,14 @@ void query_record(const char *args, Student *head) {
         }
 
         if (matches) {
-            if (foundCount > 0) {
-                printf("----------------------------------------\n");
-            }
-            printf("ID          : %d\n", current->id);
-            printf("Name        : %s\n", current->name);
-            printf("Programme   : %s\n", current->programme);
-            printf("Mark        : %.1f\n", current->mark);
+            printf("%-8d\t%-20s\t%-30s\t%.1f\n", current->id, current->name, current->programme, current->mark);
             foundCount++;
         }
 
         current = current->next;
     }
 
-    printf("========================================\n");
+    printf("================================================================================\n");
     
     if (foundCount == 0) {
         printf("CMS: No records found matching.\n");
@@ -209,14 +218,13 @@ void update_record(const char *args, Student *head)
     if (strlen(temp.programme) == 0 && temp.mark < 0)
     {
         printf("\n");
-        printf("========================================\n");
+        printf("================================================================================\n");
         printf("CMS: Record with ID=%d exists but no fields provided to update. (Programme or Mark)\n", temp.id);
-        printf("----------------------------------------\n");
-        printf("ID          : %d\n", current->id);
-        printf("Name        : %s\n", current->name);
-        printf("Programme   : %s\n", current->programme);
-        printf("Mark        : %.1f\n", current->mark);
-        printf("========================================\n");
+        printf("================================================================================\n");
+        printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
+        printf("--------------------------------------------------------------------------------\n");
+        printf("%-8d\t%-20s\t%-30s\t%.1f\n", current->id, current->name, current->programme, current->mark);
+        printf("================================================================================\n");
         printf("Example: UPDATE ID=%d Programme=NewProgramme OR Mark=85.5\n", temp.id);
         return;
     }
@@ -232,14 +240,13 @@ void update_record(const char *args, Student *head)
     }
 
     printf("\n");
-    printf("========================================\n");
+    printf("================================================================================\n");
     printf("CMS: The record with ID=%d is successfully updated.\n", temp.id);
-    printf("----------------------------------------\n");
-    printf("ID          : %d\n", current->id);
-    printf("Name        : %s\n", current->name);
-    printf("Programme   : %s\n", current->programme);
-    printf("Mark        : %.1f\n", current->mark);
-    printf("========================================\n");
+    printf("================================================================================\n");
+    printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
+    printf("--------------------------------------------------------------------------------\n");
+    printf("%-8d\t%-20s\t%-30s\t%.1f\n", current->id, current->name, current->programme, current->mark);
+    printf("================================================================================\n");
 }
 
 void show_summary(Student *head)
@@ -282,14 +289,14 @@ void show_summary(Student *head)
     averageMark = totalMarks / countStudents;
 
     printf("\n");
-    printf("========================================\n");
+    printf("================================================================================\n");
     printf("CMS: Summary of Student Records:\n");
-    printf("----------------------------------------\n");
-    printf("Total number of students: %d\n", countStudents);
-    printf("Average mark: %.1f\n", averageMark);
-    printf("Highest mark: %.1f (Student: %s)\n", highest, highestMark_name);
-    printf("Lowest mark: %.1f (Student: %s)\n", lowest, lowestMark_name);
-    printf("========================================\n");
+    printf("--------------------------------------------------------------------------------\n");
+    printf("%-30s: %d\n", "Total number of students", countStudents);
+    printf("%-30s: %.1f\n", "Average mark", averageMark);
+    printf("%-30s: %.1f (Student: %s)\n", "Highest mark", highest, highestMark_name);
+    printf("%-30s: %.1f (Student: %s)\n", "Lowest mark", lowest, lowestMark_name);
+    printf("================================================================================\n");
 
 }
 
@@ -323,18 +330,18 @@ void show_all_sorted(Student *head, const char *field, const char *order)
         return;
     }
 
-    /* count nodes */
+    // count nodes
     int count = 0;
     Student *cur = head;
     while (cur) { count++; cur = cur->next; }
 
-    /* build array of pointers */
+    // build array of pointers
     Student **arr = malloc(sizeof(Student*) * count);
     if (!arr) { printf("CMS: Memory allocation error.\n"); return; }
     cur = head; int idx = 0;
     while (cur) { arr[idx++] = cur; cur = cur->next; }
 
-    /* decide comparator by field (case-sensitive: ID or MARK expected) and order (ASC/DESC) */
+    // decide comparator by field (case-sensitive: ID or MARK expected) and order (ASC/DESC)
     const char *ord = (order && strlen(order) > 0) ? order : "ASC";
 
     if (field && strcmp(field, "ID") == 0) {
@@ -344,11 +351,11 @@ void show_all_sorted(Student *head, const char *field, const char *order)
         if (strcmp(ord, "DESC") == 0) qsort(arr, count, sizeof(Student*), cmp_mark_desc);
         else qsort(arr, count, sizeof(Student*), cmp_mark_asc);
     } else {
-        /* unknown, default to ID ascending */
+        // unknown, default to ID ascending
         qsort(arr, count, sizeof(Student*), cmp_id_asc);
     }
 
-    /* print header and rows */
+    // print header and rows
     printf("\n");
     printf("=====================================================\n");
     printf("Here are all the records found in the table \"Student Records\" (sorted by %s %s).\n", (field?field:"ID"), ord);
@@ -393,10 +400,12 @@ int delete_command(const char *args, Student **head) {
     temp.id = -1; temp.mark = -1.0f;
     temp.name[0] = '\0'; temp.programme[0] = '\0';
 
+    
     if (!parse_fields(args, &temp) || temp.id == -1) {
         printf("CMS: Invalid DELETE format. Example: DELETE ID=2401234\n");
         return -1;
     }
+    
 
     Student *cur = *head;
     while (cur && cur->id != temp.id) cur = cur->next;
@@ -426,4 +435,38 @@ int delete_command(const char *args, Student **head) {
         printf("CMS: The record with ID=%d does not exist.\n", temp.id);
         return 0;
     }
+}
+
+void log_command(const char *command)
+{
+  
+    LogEntry *newEntry = malloc(sizeof(LogEntry));
+    if (!newEntry) return;
+
+    time_t now = time(NULL);
+    struct tm *t = localtime(&now);
+    strftime(newEntry->timestamp, sizeof(newEntry->timestamp), "%d-%m-%Y %H:%M:%S", t);
+    snprintf(newEntry->command, sizeof(newEntry->command), "%s", command);
+
+    newEntry->next = logHead;
+    logHead = newEntry;
+}
+
+void export_log(const char *filename)
+{
+  
+    FILE *fp = fopen(filename, "w");
+    if (!fp) {
+        printf("CMS: Failed to export log.\n");
+        return;
+    }
+
+    LogEntry *curr = logHead;
+    while (curr) {
+        fprintf(fp, "[%s] %s\n", curr->timestamp, curr->command);
+        curr = curr->next;
+    }
+
+    fclose(fp);
+    printf("CMS: Session log exported to \"%s\".\n", filename);
 }

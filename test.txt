@@ -1,8 +1,7 @@
-Database Name: Sample-CMS
-Authors: Assistant Prof Oran Zane Devilly
-
-Table Name: ProfessorRecords
+Table Name: test.txt
 ID	Name	Programme	Mark
 8881234	Oran	Software Engineering	70.5
 8801234	Zhang	Computer Science	63.4
 8814567	John Levoy	Digital Supply Chain	85.9
+111	Elvan 	ABC 	88.0
+
