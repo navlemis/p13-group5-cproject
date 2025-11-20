@@ -146,7 +146,6 @@ int main() {
                         int res = undo_last_change(&head, &backupHead);
                         if (res == 1) {
                             isModified = 1;
-                            log_command(subCommand);
                         }
                     }
                     else if (strcmp(subUpper, "SHOW SUMMARY") == 0) {
