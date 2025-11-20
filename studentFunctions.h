@@ -21,6 +21,7 @@ int count_records(Student *head);
 void show_summary(Student *head);
 int delete_command(const char *args, Student **head);
 void free_records(Student *head);
+int undo_last_change(Student **head);
 
 #endif
 

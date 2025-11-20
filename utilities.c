@@ -20,10 +20,11 @@ void display_menu() {
     printf("4. QUERY ID=(id) Name=(name) Programme=(programme) - Search for a student record by ID, Name, or Programme.\n");
     printf("5. UPDATE ID=(id) Programme=(programme to update) Mark=(mark to update) - Update Programme and/or Mark for an existing record.\n");
     printf("6. DELETE ID=(id) - Delete a student record by ID (with confirmation).\n");
-    printf("7. SHOW SUMMARY - Display a summary statistics of the student records.\n");
-    printf("8. SAVE - Save changes to the database file after making edits.\n");
-    printf("9. BACK - Goes back to landing menu to load another file or quit program.\n");
-    printf("10. QUIT - Exit the program.\n");
+    printf("7. UNDO - Undo the last change (INSERT, DELETE or UPDATE).\n");
+    printf("8. SHOW SUMMARY - Display a summary statistics of the student records.\n");
+    printf("9. SAVE - Save changes to the database file after making edits.\n");
+    printf("10. BACK - Goes back to landing menu to load another file or quit program.\n");
+    printf("11. QUIT - Exit the program.\n");
     printf("Please enter a command (Case Sensitive): ");
 }
 
