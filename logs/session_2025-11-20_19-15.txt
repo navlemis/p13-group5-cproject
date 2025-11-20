@@ -1,0 +1,5 @@
+[20-11-2025 19:15:16] show summary
+[20-11-2025 19:14:49] show all sort by mark
+[20-11-2025 19:14:46] show all sort by id
+[20-11-2025 19:14:43] show all
+[20-11-2025 19:14:39] open test.txt

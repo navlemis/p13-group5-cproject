@@ -78,6 +78,7 @@ int main() {
                             }
                         } else {
                             show_all_records(head, currentTableName);
+                            log_command(subCommand);
                         }
                     }
                     else if (strcmp(subUpper, "QUIT") == 0) {
@@ -88,9 +89,9 @@ int main() {
                                 if (toupper((unsigned char)resp[0]) == 'Y') {
                                     if (save_records(userCommand2, head)) {
                                         isModified = 0;
-                                        printf("CMS: Changes saved to \"%s\" successfully.\n", userCommand2);
+                                        printf("Changes saved to \"%s\" successfully.\n", userCommand2);
                                     } else {
-                                        printf("CMS: Failed to save changes to \"%s\".\n", userCommand2);
+                                        printf("Failed to save changes to \"%s\".\n", userCommand2);
                                     }
                                 }
                             }
@@ -112,7 +113,7 @@ int main() {
                             log_command(subCommand);
                             isModified = 1;
                         } else {
-                            printf("CMS: Invalid INSERT format. Example: INSERT ID=123 Name=Elvan Programme=CMS Mark=88\n");
+                            printf("Invalid INSERT format. Example: INSERT ID=123 Name=Elvan Programme=CMS Mark=88\n");
                         }
                     }
                     else if (strncmp(subUpper, "QUERY", 5) == 0) {
@@ -121,7 +122,7 @@ int main() {
                             query_record(queryArgs, head);
                             log_command(subCommand);
                         } else {
-                            printf("CMS: Invalid QUERY format. Example: QUERY ID=123\n");
+                            printf("Invalid QUERY format. Example: QUERY ID=123\n");
                         }
                     }
                     else if (strncmp(subUpper, "UPDATE", 6) == 0) {
@@ -131,7 +132,7 @@ int main() {
                             log_command(subCommand);
                             isModified = 1;
                         } else {
-                            printf("CMS: Invalid UPDATE format. Example: UPDATE ID=123 Programme=NewProgramme Mark=85.5\n");
+                            printf("Invalid UPDATE format. Example: UPDATE ID=123 Programme=NewProgramme Mark=85.5\n");
                         }
                     }
                     else if (strncmp(subUpper, "DELETE", 6) == 0) {
@@ -143,7 +144,7 @@ int main() {
                                 log_command(subCommand);
                             }
                         } else {
-                            printf("CMS: Invalid DELETE format. Example: DELETE ID=2401234\n");
+                            printf("Invalid DELETE format. Example: DELETE ID=2401234\n");
                         }
                     }
                     else if (strcmp(subUpper, "SHOW SUMMARY") == 0) {
@@ -154,16 +155,17 @@ int main() {
                     else if (strncmp(subUpper, "SAVE", 4) == 0) {
                         if (save_records(userCommand2, head)) {
                             isModified = 0;
-                            printf("CMS: Changes saved to \"%s\" successfully.\n", userCommand2);
+                            printf("Changes saved to \"%s\" successfully.\n", userCommand2);
                             log_command(subCommand);
                         } else {
-                            printf("CMS: Failed to save changes to \"%s\".\n", userCommand2);
+                            printf("Failed to save changes to \"%s\".\n", userCommand2);
                         }
                     }
                     else if(strcmp(subCommand, "BACK") == 0)
                     {
                         free_records(head);
                         head = NULL;
+                        log_command(subCommand);
                         break;
                     }
                     else {
@@ -171,7 +173,7 @@ int main() {
                     }
                 }
             } else {
-                printf("CMS: Failed to open database file \"%s\".\n", userCommand2);
+                printf("Failed to open database file \"%s\".\n", userCommand2);
             }
         }
         else if (strcmp(userCommand1, "QUIT") == 0) {

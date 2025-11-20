@@ -35,7 +35,7 @@ void insert_record(const char *args, Student **head)
         */
 
         //failed parsing returns error message
-        printf("CMS: Failed to parse INSERT fields. Check your formatting please!\n");
+        printf("Failed to parse INSERT fields. Check your formatting please!\n");
         return;
     }
 
@@ -43,7 +43,7 @@ void insert_record(const char *args, Student **head)
     if (temp.id == -1 || strlen(temp.name) == 0 || strlen(temp.programme) == 0 || temp.mark < 0)
     {
         //failed INSERT command format due to missing fields
-        printf("CMS: Invalid INSERT format. Required: ID, Name, Programme, Mark.\n");
+        printf("Invalid INSERT format. Required: ID, Name, Programme, Mark.\n");
         return;
     }
 
@@ -54,7 +54,7 @@ void insert_record(const char *args, Student **head)
         if (current->id == temp.id)
         {
             //uses current student to check for duplicate ID
-            printf("CMS: Record with ID=%d already exists.\n", temp.id);
+            printf("Record with ID=%d already exists.\n", temp.id);
             return;
         }
         current = current->next; //moves to next student in linkedlist, eventually stopps at null which comes after the end of last item in the linkedlist
@@ -76,7 +76,7 @@ void insert_record(const char *args, Student **head)
         current->next = newNode;
     }
 
-    printf("CMS: Record with ID=%d successfully inserted.\n", temp.id);
+    printf("Record with ID=%d successfully inserted.\n", temp.id);
 }
 
 void show_all_records(Student *head, char *tableName)
@@ -105,7 +105,7 @@ void show_all_records(Student *head, char *tableName)
 // Query
 void query_record(const char *args, Student *head) {
     if (!args || strlen(args) == 0) {
-        printf("CMS: Invalid QUERY format. Examples:\n");
+        printf("Invalid QUERY format. Examples:\n");
         printf("  QUERY ID=123\n");
         printf("  QUERY Name=Joshua\n");
         printf("  QUERY Programme=Software Engineering\n");
@@ -123,7 +123,7 @@ void query_record(const char *args, Student *head) {
 
     // Special features for Query: prompt an example if command is invalid
     if (!searchByID && !searchByName && !searchByProgramme) {
-        printf("CMS: No valid search field provided. Examples:\n");
+        printf("No valid search field provided. Examples:\n");
         printf("  QUERY ID=123\n");
         printf("  QUERY Name=Joshua Chen\n");
         printf("  QUERY Programme=Software Engineering\n");
@@ -182,7 +182,7 @@ void query_record(const char *args, Student *head) {
     printf("================================================================================\n");
     
     if (foundCount == 0) {
-        printf("CMS: No records found matching.\n");
+        printf("No records found matching.\n");
     } else {
         printf("Total records found: %d\n", foundCount);
     }
@@ -194,7 +194,7 @@ void update_record(const char *args, Student *head)
     Student temp;
     if (!parse_fields(args, &temp) || temp.id == -1)
     {
-        printf("CMS: Invalid UPDATE format. Example: UPDATE ID=123 Programme=NewProgramme OR Mark=85.5\n");
+        printf("Invalid UPDATE format. Example: UPDATE ID=123 Programme=NewProgramme OR Mark=85.5\n");
         return;
     }
 
@@ -211,7 +211,7 @@ void update_record(const char *args, Student *head)
     if (!current)
     {
         printf("\n");
-        printf("CMS: The record with ID=%d does not exist.\n", temp.id);
+        printf("The record with ID=%d does not exist.\n", temp.id);
         return;
     }
 
@@ -219,7 +219,7 @@ void update_record(const char *args, Student *head)
     {
         printf("\n");
         printf("================================================================================\n");
-        printf("CMS: Record with ID=%d exists but no fields provided to update. (Programme or Mark)\n", temp.id);
+        printf("Record with ID=%d exists but no fields provided to update. (Programme or Mark)\n", temp.id);
         printf("================================================================================\n");
         printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
         printf("--------------------------------------------------------------------------------\n");
@@ -241,7 +241,7 @@ void update_record(const char *args, Student *head)
 
     printf("\n");
     printf("================================================================================\n");
-    printf("CMS: The record with ID=%d is successfully updated.\n", temp.id);
+    printf("The record with ID=%d is successfully updated.\n", temp.id);
     printf("================================================================================\n");
     printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
     printf("--------------------------------------------------------------------------------\n");
@@ -253,7 +253,7 @@ void show_summary(Student *head)
 {
     if (!head)
     {
-        printf("CMS: No records available to summarise.\n");
+        printf("No records available to summarise.\n");
         return;
     }
 
@@ -290,7 +290,7 @@ void show_summary(Student *head)
 
     printf("\n");
     printf("================================================================================\n");
-    printf("CMS: Summary of Student Records:\n");
+    printf("Summary of Student Records:\n");
     printf("--------------------------------------------------------------------------------\n");
     printf("%-30s: %d\n", "Total number of students", countStudents);
     printf("%-30s: %.1f\n", "Average mark", averageMark);
@@ -337,7 +337,7 @@ void show_all_sorted(Student *head, const char *field, const char *order)
 
     // build array of pointers
     Student **arr = malloc(sizeof(Student*) * count);
-    if (!arr) { printf("CMS: Memory allocation error.\n"); return; }
+    if (!arr) { printf("Memory allocation error.\n"); return; }
     cur = head; int idx = 0;
     while (cur) { arr[idx++] = cur; cur = cur->next; }
 
@@ -402,7 +402,7 @@ int delete_command(const char *args, Student **head) {
 
     
     if (!parse_fields(args, &temp) || temp.id == -1) {
-        printf("CMS: Invalid DELETE format. Example: DELETE ID=2401234\n");
+        printf("Invalid DELETE format. Example: DELETE ID=2401234\n");
         return -1;
     }
     
@@ -410,29 +410,29 @@ int delete_command(const char *args, Student **head) {
     Student *cur = *head;
     while (cur && cur->id != temp.id) cur = cur->next;
     if (!cur) {
-        printf("CMS: The record with ID=%d does not exist.\n", temp.id);
+        printf("The record with ID=%d does not exist.\n", temp.id);
         return 0;
     }
 
-    printf("CMS: Are you sure you want to delete record with ID=%d? Type \"Y\" to Confirm or type \"N\" to cancel.\n", temp.id);
+    printf("Are you sure you want to delete record with ID=%d? Type \"Y\" to Confirm or type \"N\" to cancel.\n", temp.id);
     char yn[16];
     if (!fgets(yn, sizeof(yn), stdin)) {
-        printf("CMS: The deletion is cancelled.\n");
+        printf("The deletion is cancelled.\n");
         return 0;
     }
     trim_eol(yn);
     to_upper(yn);
 
     if (yn[0] != 'Y') {
-        printf("CMS: The deletion is cancelled.\n");
+        printf("The deletion is cancelled.\n");
         return 0;
     }
 
     if (delete_record_by_id(head, temp.id)) {
-        printf("CMS: The record with ID=%d is successfully deleted.\n", temp.id);
+        printf("The record with ID=%d is successfully deleted.\n", temp.id);
         return 1;
     } else {
-        printf("CMS: The record with ID=%d does not exist.\n", temp.id);
+        printf("The record with ID=%d does not exist.\n", temp.id);
         return 0;
     }
 }
@@ -457,7 +457,7 @@ void export_log(const char *filename)
   
     FILE *fp = fopen(filename, "w");
     if (!fp) {
-        printf("CMS: Failed to export log.\n");
+        printf("Failed to export log.\n");
         return;
     }
 
@@ -468,5 +468,5 @@ void export_log(const char *filename)
     }
 
     fclose(fp);
-    printf("CMS: Session log exported to \"%s\".\n", filename);
+    printf("Session log exported to \"%s\".\n", filename);
 }

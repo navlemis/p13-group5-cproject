@@ -1,0 +1,5 @@
+[20-11-2025 18:19:30] SHOW ALL
+[20-11-2025 18:19:26] insert ID=888 Name=Elvan Programme=DSC Mark=88
+[20-11-2025 18:19:22] insert ID=888 Name=Elvan Programme=DSC mark=88
+[20-11-2025 18:19:10] show all
+[20-11-2025 18:19:09] open test.txt
