@@ -89,18 +89,17 @@ void show_all_records(Student *head, char *tableName)
 
     
     printf("\n");
-    printf("================================================================================\n");
+    printf("========================================================================================================\n");
     printf("Here are all the records found in the table %s.\n", tableName);
-    printf("================================================================================\n");
-    printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
-    printf("--------------------------------------------------------------------------------\n");
-
+    printf("========================================================================================================\n");
+    printf("%-8s\t%-20s\t%-55s\t%s\n", "ID", "Name", "Programme", "Mark");
+    printf("--------------------------------------------------------------------------------------------------------\n");
     while (head)
     {
-        printf("%-8d\t%-20s\t%-30s\t%.1f\n", head->id, head->name, head->programme, head->mark);
+        printf("%-8d\t%-20s\t%-55s\t%.1f\n", head->id, head->name, head->programme, head->mark);
         head = head->next;
     }
-    printf("================================================================================\n");
+    printf("========================================================================================================\n");
 }
 // Query
 void query_record(const char *args, Student *head) {
@@ -135,12 +134,11 @@ void query_record(const char *args, Student *head) {
     int foundCount = 0;
 
     printf("\n");
-    printf("================================================================================\n");
+    printf("========================================================================================================\n");
     printf("Search Results:\n");
-    printf("================================================================================\n");
-    printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
-    printf("--------------------------------------------------------------------------------\n");
-
+    printf("========================================================================================================\n");
+    printf("%-8s\t%-20s\t%-55s\t%s\n", "ID", "Name", "Programme", "Mark");
+    printf("--------------------------------------------------------------------------------------------------------\n");
     while (current != NULL) {
         int matches = 0;
 
@@ -172,14 +170,14 @@ void query_record(const char *args, Student *head) {
         }
 
         if (matches) {
-            printf("%-8d\t%-20s\t%-30s\t%.1f\n", current->id, current->name, current->programme, current->mark);
+            printf("%-8d\t%-20s\t%-55s\t%.1f\n", current->id, current->name, current->programme, current->mark);
             foundCount++;
         }
 
         current = current->next;
     }
 
-    printf("================================================================================\n");
+    printf("========================================================================================================\n");
     
     if (foundCount == 0) {
         printf("No records found matching.\n");
@@ -221,13 +219,13 @@ void update_record(const char *args, Student *head)
     {   
         // no update fields provided, displays the error message
         printf("\n");
-        printf("================================================================================\n");
+        printf("========================================================================================================\n");
         printf("Record with ID=%d exists but no fields provided to update. (Programme or Mark)\n", temp.id);
-        printf("================================================================================\n");
-        printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
-        printf("--------------------------------------------------------------------------------\n");
-        printf("%-8d\t%-20s\t%-30s\t%.1f\n", current->id, current->name, current->programme, current->mark);
-        printf("================================================================================\n");
+        printf("========================================================================================================\n");
+        printf("%-8s\t%-20s\t%-55s\t%s\n", "ID", "Name", "Programme", "Mark");
+        printf("--------------------------------------------------------------------------------------------------------\n");
+        printf("%-8d\t%-20s\t%-55s\t%.1f\n", current->id, current->name, current->programme, current->mark);
+        printf("========================================================================================================\n");
         printf("Example: UPDATE ID=%d Programme=NewProgramme OR Mark=85.5\n", temp.id);
         return;
     }
@@ -244,13 +242,13 @@ void update_record(const char *args, Student *head)
 
     // display success message with updated record in formatted table
     printf("\n");
-    printf("================================================================================\n");
+    printf("========================================================================================================\n");
     printf("The record with ID=%d is successfully updated.\n", temp.id);
-    printf("================================================================================\n");
-    printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
-    printf("--------------------------------------------------------------------------------\n");
-    printf("%-8d\t%-20s\t%-30s\t%.1f\n", current->id, current->name, current->programme, current->mark);
-    printf("================================================================================\n");
+    printf("========================================================================================================\n");
+    printf("%-8s\t%-20s\t%-55s\t%s\n", "ID", "Name", "Programme", "Mark");
+    printf("--------------------------------------------------------------------------------------------------------\n");
+    printf("%-8d\t%-20s\t%-55s\t%.1f\n", current->id, current->name, current->programme, current->mark);
+    printf("========================================================================================================\n");
 }
 
 void show_summary(Student *head)
@@ -363,16 +361,16 @@ void show_all_sorted(Student *head, const char *field, const char *order)
 
     // print header and rows
     printf("\n");
-    printf("=====================================================\n");
+    printf("========================================================================================================\n");
     printf("Here are all the records found in the table \"Student Records\" (sorted by %s %s).\n", (field?field:"ID"), ord);
-    printf("=====================================================\n");
-    printf("ID\t\tName\t\t\tProgramme\t\t\tMark\n");
-    printf("-----------------------------------------------------\n");
+    printf("========================================================================================================\n");
+    printf("%-8s\t%-20s\t%-55s\t%s\n", "ID", "Name", "Programme", "Mark");
+    printf("--------------------------------------------------------------------------------------------------------\n");
     for (int i = 0; i < count; ++i) {
         Student *s = arr[i];
-        printf("%-8d\t%-20s\t%-30s\t%.1f\n", s->id, s->name, s->programme, s->mark);
+        printf("%-8d\t%-20s\t%-45s\t%.1f\n", s->id, s->name, s->programme, s->mark);
     }
-    printf("=====================================================\n");
+    printf("========================================================================================================\n");
 
     free(arr);
 }

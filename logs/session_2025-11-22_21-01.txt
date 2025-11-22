@@ -1,0 +1,12 @@
+[22-11-2025 21:01:40] save
+[22-11-2025 21:01:33] UPDATE ID=8801236  Mark=65
+[22-11-2025 21:01:16] SHOW ALL
+[22-11-2025 21:01:12] INSERT ID=8801236 Name=Harry  Programme=Electrical and Electronics Engineering  Mark=60
+[22-11-2025 21:01:03] SHOW ALL
+[22-11-2025 21:00:58] DELETE ID=8801236
+[22-11-2025 21:00:42] SHOW ALL
+[22-11-2025 21:00:39] INSERT ID=8801236 Name=Gary Programme=Electrical and Electronics Engineering  Mark=60
+[22-11-2025 21:00:30] INSERT ID=8801235 Name=Gary Programme=Electrical and Electronics Engineering  Mark=60
+[22-11-2025 20:59:55] INSERT ID=8801235 Name=Gary Programme=Communications and Digital Media Mark=70
+[22-11-2025 20:59:26] SHOW ALL
+[22-11-2025 20:59:25] OPEN test.txt
