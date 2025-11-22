@@ -17,6 +17,7 @@ int main() {
     char userCommand2[129];
     char currentTableName[128] = "";
     Student *head = NULL;
+    Student *backupHead = NULL;
     int isModified = 0;
 
 
@@ -104,11 +105,16 @@ int main() {
                         char fullPath[128];
                         sprintf(fullPath, "logs/%s", logFilename);
                         export_log(fullPath);
+                        free_records(head);
+                        free_records(backupHead);
+                        head = NULL;
+                        backupHead = NULL;
                         return 0;
                     }
                     else if (strncmp(subUpper, "INSERT", 6) == 0) {
                         if (strlen(subCommand) > 7) {
                             const char *insertArgs = subCommand + 7;
+                            backup_records(head, &backupHead);
                             insert_record(insertArgs, &head);
                             log_command(subCommand);
                             isModified = 1;
@@ -128,6 +134,7 @@ int main() {
                     else if (strncmp(subUpper, "UPDATE", 6) == 0) {
                         if (strlen(subCommand) > 7) {
                             const char *updateArgs = subCommand + 7;
+                            backup_records(head, &backupHead);
                             update_record(updateArgs, head);
                             log_command(subCommand);
                             isModified = 1;
@@ -138,6 +145,7 @@ int main() {
                     else if (strncmp(subUpper, "DELETE", 6) == 0) {
                         if (strlen(subCommand) > 7) {
                             const char *delArgs = subCommand + 7;  
+                            backup_records(head, &backupHead);
                             int res = delete_command(delArgs, &head);
                             if (res == 1) {
                                 isModified = 1; 
@@ -145,6 +153,13 @@ int main() {
                             }
                         } else {
                             printf("Invalid DELETE format. Example: DELETE ID=2401234\n");
+                        }
+                    }
+                    else if (strcmp(subUpper, "UNDO") == 0) {
+                        int res = undo_last_change(&head, &backupHead);
+                        if (res == 1) {
+                            isModified = 1;
+                            log_command(subCommand);
                         }
                     }
                     else if (strcmp(subUpper, "SHOW SUMMARY") == 0) {
@@ -178,6 +193,10 @@ int main() {
         }
         else if (strcmp(userCommand1, "QUIT") == 0) {
             printf("Exiting the CMS Database System. Goodbye!\n");
+            free_records(head);
+            free_records(backupHead);
+            head = NULL;
+            backupHead = NULL;
             return 0;
         }
         else {

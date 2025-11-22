@@ -21,6 +21,63 @@ void free_records(Student *head)
     }
 }
 
+void backup_records(Student *head, Student **backupHead)
+{
+    if (!backupHead) return;
+
+    free_records(*backupHead);
+    *backupHead = NULL;
+
+    Student *src = head;
+    Student *prevNew = NULL;
+
+    while (src)
+    {
+        Student *newNode = malloc(sizeof(Student));
+        if (!newNode)
+        {
+            printf("CMS: Unable to create backup (memory error).\n");
+            free_records(*backupHead);
+            *backupHead = NULL;
+            return;
+        }
+
+        newNode->id = src->id;
+        strcpy(newNode->name, src->name);
+        strcpy(newNode->programme, src->programme);
+        newNode->mark = src->mark;
+        newNode->next = NULL;
+
+        if (prevNew == NULL)
+        {
+            *backupHead = newNode;     
+        }
+        else
+        {
+            prevNew->next = newNode;    
+        }
+
+        prevNew = newNode;
+        src = src->next;
+    }
+}
+
+int undo_last_change(Student **head, Student **backupHead)
+{
+    if (!head || !backupHead || !*backupHead)
+    {
+        printf("CMS: No change to undo.\n");
+        return 0;
+    }
+
+    free_records(*head);
+
+    *head = *backupHead;
+    *backupHead = NULL;
+
+    printf("CMS: Last change has been undone.\n");
+    return 1;
+}
 
 void insert_record(const char *args, Student **head) 
 {

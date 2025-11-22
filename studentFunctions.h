@@ -30,6 +30,8 @@ int delete_command(const char *args, Student **head);
 void free_records(Student *head);
 void log_command(const char *command);
 void export_log(const char *filename);
+void backup_records(Student *head, Student **backupHead);
+int undo_last_change(Student **head, Student **backupHead);
 
 #endif
 
