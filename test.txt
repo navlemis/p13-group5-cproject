@@ -3,4 +3,6 @@ ID	Name	Programme	Mark
 8881234	Oran	Software Engineering	70.5
 8801234	Zhang	Computer Science	63.4
 8814567	John Levoy	Digital Supply Chain	85.9
+8801235	Gary 	Communications and Digital Media 	70.0
+8801236	Harry  	Electrical and Electronics Engineering  	65.0
 
