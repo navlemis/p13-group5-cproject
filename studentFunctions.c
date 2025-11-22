@@ -191,32 +191,35 @@ void query_record(const char *args, Student *head) {
 
 void update_record(const char *args, Student *head)
 {
-    Student temp;
-    if (!parse_fields(args, &temp) || temp.id == -1)
-    {
+    Student temp;   // temp student that holds parsed data
+    if (!parse_fields(args, &temp) || temp.id == -1) // parses the fileds from args into temp student and validates ID
+    {   
+        // failed parsing or missing ID returns an error message
         printf("Invalid UPDATE format. Example: UPDATE ID=123 Programme=NewProgramme OR Mark=85.5\n");
         return;
     }
 
-    Student *current = head;
-    while (current)
+    Student *current = head; // sets current student to the start of the linkedlist
+    while (current) // loops while current is not NULL
     {
-        if (current->id == temp.id)
+        if (current->id == temp.id) // searches for matching ID in the database
         {
-            break;
+            break; // exits the loop when the record is found
         }
-        current = current->next;
+        current = current->next; // moves to next student in the linkedlist if record not found yet
     }    
 
-    if (!current)
-    {
+    if (!current) // checks if the record with matching ID is found
+    {   
+        // record not found, displays the error message
         printf("\n");
         printf("The record with ID=%d does not exist.\n", temp.id);
         return;
     }
 
-    if (strlen(temp.programme) == 0 && temp.mark < 0)
-    {
+    if (strlen(temp.programme) == 0 && temp.mark < 0) // checking to see if update fields programme or mark are provided
+    {   
+        // no update fields provided, displays the error message
         printf("\n");
         printf("================================================================================\n");
         printf("Record with ID=%d exists but no fields provided to update. (Programme or Mark)\n", temp.id);
@@ -229,16 +232,17 @@ void update_record(const char *args, Student *head)
         return;
     }
 
-    if (strlen(temp.programme) > 0)
+    if (strlen(temp.programme) > 0) // checks if programme field needs updating
     {
-        strcpy(current->programme, temp.programme);
+        strcpy(current->programme, temp.programme); // updates the programme field if it is provided
     }
 
-    if (temp.mark >= 0)
+    if (temp.mark >= 0) // checks if mark field needs updating
     {
-        current->mark = temp.mark;
+        current->mark = temp.mark; // updates the mark field if it is provided
     }
 
+    // display success message with updated record in formatted table
     printf("\n");
     printf("================================================================================\n");
     printf("The record with ID=%d is successfully updated.\n", temp.id);
