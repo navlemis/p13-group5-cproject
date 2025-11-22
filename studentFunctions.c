@@ -255,43 +255,45 @@ void update_record(const char *args, Student *head)
 
 void show_summary(Student *head)
 {
-    if (!head)
-    {
+    if (!head) // checks if linkedlist is empty
+    {   
+        // no records found in the opened database, displays error message
         printf("No records available to summarise.\n");
         return;
     }
 
-    int countStudents = 0;
-    float totalMarks = 0.0;
-    float averageMark = 0.0;
-    float highest = head->mark;
-    float lowest = head->mark;
-    char highestMark_name[88];
-    char lowestMark_name[88];
-    strcpy(highestMark_name, head->name);
-    strcpy(lowestMark_name, head->name); 
+    int countStudents = 0; // initialize student count
+    float totalMarks = 0.0; // initialize total marks
+    float averageMark = 0.0; // initialize average mark
+    float highest = head->mark; // initialize highest mark with first student's mark
+    float lowest = head->mark; // initialize lowest mark with first student's mark
+    char highestMark_name[88]; // stores name of the student with the highest mark
+    char lowestMark_name[88]; // stores name of the student with the lowest mark
+    strcpy(highestMark_name, head->name); // sets initial highest mark student name
+    strcpy(lowestMark_name, head->name); // sets initial lowest mark student name
 
-    while (head)
+    while (head) // loops through the entire linkedlist in the database
     {
-        countStudents++;
-        totalMarks += head->mark;
+        countStudents++; // increments student count as it iterates through
+        totalMarks += head->mark; // accumulates the marks of each student as it iterates through
 
-        if (head->mark > highest)
+        if (head->mark > highest) // checks if current student has higher mark
         {
-            highest = head->mark;
-            strcpy(highestMark_name, head->name);
+            highest = head->mark; // updates highest mark
+            strcpy(highestMark_name, head->name); // updates the name of student with highest mark
         }
 
-        if (head->mark < lowest)
+        if (head->mark < lowest) // checks if current student has lower mark
         {
-            lowest = head->mark;
-            strcpy(lowestMark_name, head->name);
+            lowest = head->mark; // updates lowest mark
+            strcpy(lowestMark_name, head->name); // updates the name of student with lowest mark
         }
-        head = head->next;
+        head = head->next; // moves to the next student in the linkedlist
     }
 
-    averageMark = totalMarks / countStudents;
+    averageMark = totalMarks / countStudents; // calculates the average mark from total marks and student count
 
+    // displays the summary in a formatted table
     printf("\n");
     printf("================================================================================\n");
     printf("Summary of Student Records:\n");
