@@ -1,0 +1,1 @@
+[22-11-2025 14:16:33] open Sample-CMS.txt

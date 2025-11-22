@@ -172,9 +172,10 @@ int main() {
                         handle_unknown(subCommand);
                     }
                 }
-            } else {
-                printf("Failed to open database file \"%s\".\n", userCommand2);
-            }
+            } 
+            //else {
+            //    printf("Failed to open database file \"%s\".\n", userCommand2);
+            //}
         }
         else if (strcmp(userCommand1, "QUIT") == 0) {
             printf("Exiting the CMS Database System. Goodbye!\n");
