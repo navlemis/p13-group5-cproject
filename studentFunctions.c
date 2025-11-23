@@ -31,10 +31,10 @@ void backup_records(Student *head, Student **backupHead)
     free_records(*backupHead); // Clears previous backup if any
     *backupHead = NULL;
 
-    Student *src = head;
+    Student *temp = head;
     Student *prevNew = NULL;
 
-    while (src != NULL)
+    while (temp != NULL)
     {
         Student *newNode = malloc(sizeof(Student));
         if (newNode == NULL)
@@ -45,10 +45,10 @@ void backup_records(Student *head, Student **backupHead)
             return;
         }
         //Copy record fields
-        newNode->id = src->id;
-        strcpy(newNode->name, src->name);
-        strcpy(newNode->programme, src->programme);
-        newNode->mark = src->mark;
+        newNode->id = temp->id;
+        strcpy(newNode->name, temp->name);
+        strcpy(newNode->programme, temp->programme);
+        newNode->mark = temp->mark;
         newNode->next = NULL;
 
         if (prevNew == NULL)
@@ -61,7 +61,7 @@ void backup_records(Student *head, Student **backupHead)
         }
 
         prevNew = newNode;
-        src = src->next;
+        temp = temp->next;
     }
 }
 
