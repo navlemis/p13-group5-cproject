@@ -11,6 +11,12 @@ void to_upper(char *str) {
     }
 }
 
+int empty_check(const char *str) {
+    //returns 1 if string is empty or containts space only, else 0
+    if (str == NULL) return 1;
+    size_t len = strlen(str);
+    return len == strspn(str, " \t\r\n\v\f");
+}
 
 // Displays the CMS command menu
 void display_menu() {

@@ -1,0 +1,3 @@
+[23-11-2025 11:48:53] INSERT ID=1 Name=A Programme=DSC Mark=88
+[23-11-2025 11:48:45] INSERT ID=1 Name= Programme=DSC Mark=88
+[23-11-2025 11:48:32] open sample-cms.txt

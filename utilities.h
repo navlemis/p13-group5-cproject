@@ -5,5 +5,7 @@ void to_upper(char *str);
 void display_menu(void);
 void display_declaration(void);
 void handle_unknown(const char *command);
+int empty_check(const char *str);
+
 
 #endif

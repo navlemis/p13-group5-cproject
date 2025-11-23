@@ -40,7 +40,7 @@ void insert_record(const char *args, Student **head)
     }
 
 
-    if (temp.id < 0 || strlen(temp.name) == 0 || strlen(temp.programme) == 0 || temp.mark < 0)
+    if (temp.id < 0 || empty_check(temp.name) == 1 || empty_check(temp.programme) == 1 || temp.mark < 0)
     {
         //failed INSERT command format due to missing fields
         printf("Invalid INSERT format. Required: ID, Name, Programme, Mark.\n");

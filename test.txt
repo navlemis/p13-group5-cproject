@@ -1,4 +1,4 @@
-Taasdasable Name: test.txt
+Table Name: test.txt
 ID	Name	Programme	Mark
 8881234	Oran	Software Engineering	70.5
 8801234	Zhang	Computer Science	63.4
