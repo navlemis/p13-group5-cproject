@@ -6,51 +6,56 @@
 
 int load_records(const char *filename, Student **head, char *tableName)
 {
-    FILE *file = fopen(filename, "r");
+    FILE *file = fopen(filename, "r"); //opens file in read mode
+
+
     if (!file)
     {
+        //prints error if fail
         printf("Error opening file, are you sure the file exists?\n");
         return 0;
     }
-    char line[256];
-    int inTable = 0;
 
-    while (fgets(line, sizeof(line), file))
+
+    char line[256]; //variable to hold each line during while loop
+    int inTable = 0; //marker to indicate if in table section
+
+    while (fgets(line, sizeof(line), file)) //reads each line
     {
-        line[strcspn(line, "\n")] = 0;
+        line[strcspn(line, "\n")] = 0; //remove back newline character from fgets
 
-        if (strncmp(line, "Table Name:", 11) == 0)
+        if (strncmp(line, "Table Name:", 11) == 0) //table name detection
         {
-            sscanf(line, "Table Name: %127[^\n]", tableName);
-            inTable = 1;
+            sscanf(line, "Table Name: %127[^\n]", tableName); //stores in tableName variable 
+            inTable = 1; 
             continue;
         }
 
-        if (inTable && strlen(line) > 0 && isdigit(line[0]))
+        if (inTable && strlen(line) > 0 && isdigit(line[0])) //checks for table, line length, and if ID is present
         {
-            Student *newNode = malloc(sizeof(Student));
+            Student *newNode = malloc(sizeof(Student)); //new node
             sscanf(line, "%d %49[^\t] %49[^\t] %f", &newNode->id, newNode->name, newNode->programme, &newNode->mark);
             newNode->next = NULL;
 
             if (*head == NULL)
             {
-                *head = newNode;
+                *head = newNode; //first node
             }
             
             else
             {
                 Student *current = *head;
                 while (current->next) current = current->next;
-                current->next = newNode;
+                current->next = newNode; //append to end of linkedlist
             }
         }
     }
 
-    fclose(file);
+    fclose(file); //close
 
     if (!inTable)
     {
-        printf("Table not found. Ensure you are opening the correct .txt file.\n");
+        printf("Table not found. Ensure you are opening the correct .txt file.\n"); //checks for table presence
         return 0;
     }
 

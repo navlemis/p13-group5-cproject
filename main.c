@@ -178,8 +178,29 @@ int main() {
             //}
         }
         else if (strcmp(userCommand1, "QUIT") == 0) {
-            printf("Exiting the CMS Database System. Goodbye!\n");
-            return 0;
+            if (isModified) {
+                            char resp[8];
+                            printf("You have unsaved changes. Save before exit? (Y/N): ");
+                            if (fgets(resp, sizeof(resp), stdin) != NULL) {
+                                if (toupper((unsigned char)resp[0]) == 'Y') {
+                                    if (save_records(userCommand2, head)) {
+                                        isModified = 0;
+                                        printf("Changes saved to \"%s\" successfully.\n", userCommand2);
+                                    } else {
+                                        printf("Failed to save changes to \"%s\".\n", userCommand2);
+                                    }
+                                }
+                            }
+                        }
+                        printf("Exiting the CMS Database System. Goodbye!\n");
+                        char logFilename[128];
+                        time_t now = time(NULL);
+                        struct tm *t = localtime(&now);
+                        strftime(logFilename, sizeof(logFilename), "session_%Y-%m-%d_%H-%M.txt", t);
+                        char fullPath[128];
+                        sprintf(fullPath, "logs/%s", logFilename);
+                        export_log(fullPath);
+                        return 0;
         }
         else {
             handle_unknown(userCommand1);
