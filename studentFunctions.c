@@ -21,6 +21,68 @@ void free_records(Student *head)
     }
 }
 
+// Backup
+// head: current student records
+// backupHead: pointer to backup student records
+void backup_records(Student *head, Student **backupHead)
+{
+    if (backupHead == NULL) { return; }
+
+    free_records(*backupHead); // Clears previous backup if any
+    *backupHead = NULL;
+
+    Student *src = head;
+    Student *prevNew = NULL;
+
+    while (src != NULL)
+    {
+        Student *newNode = malloc(sizeof(Student));
+        if (newNode == NULL)
+        {
+            printf("CMS: Unable to create backup (memory error).\n");
+            free_records(*backupHead);
+            *backupHead = NULL;
+            return;
+        }
+        //Copy record fields
+        newNode->id = src->id;
+        strcpy(newNode->name, src->name);
+        strcpy(newNode->programme, src->programme);
+        newNode->mark = src->mark;
+        newNode->next = NULL;
+
+        if (prevNew == NULL)
+        {
+            *backupHead = newNode;     
+        }
+        else
+        {
+            prevNew->next = newNode;    
+        }
+
+        prevNew = newNode;
+        src = src->next;
+    }
+}
+
+// Undo (single-level undo)
+// Return 1 if successful, 0 otherwise
+int undo_last_change(Student **head, Student **backupHead)
+{
+    if (head == NULL || backupHead == NULL || *backupHead == NULL)
+    {
+        printf("CMS: No change to undo.\n");
+        return 0;
+    }
+
+    free_records(*head);
+
+    *head = *backupHead;
+    *backupHead = NULL;
+
+    printf("CMS: Last change has been undone.\n");
+    return 1;
+}
 
 void insert_record(const char *args, Student **head) 
 {
